@@ -3,29 +3,16 @@ package com.aominfosystem.controller;
 
 import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.controller.cofig.InstructionsConfig;
-import com.aominfosystem.dto.MyBatisUtil;
-import com.aominfosystem.mapper.NoteMapper;
-import com.aominfosystem.mapper.UserMapper;
-import com.aominfosystem.pojo.Note;
-import com.aominfosystem.pojo.User;
 import com.aominfosystem.utils.ConfigurationFile;
 import com.aominfosystem.utils.DrawUtils;
 import com.aominfosystem.utils.RegularExpressionUtils;
-import com.aominfosystem.utils.TypeTesting;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import org.apache.ibatis.session.SqlSession;
-import org.aspectj.weaver.ast.Not;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.aominfosystem.pulg.NoteFunction.*;
 import static com.sobte.cqp.jcq.event.JcqApp.CC;
-import static com.sobte.cqp.jcq.event.JcqApp.CQ;
 
 
 public class Instructions {

@@ -2,7 +2,7 @@ package com.aominfosystem.controller;
 
 
 import com.aominfosystem.config.GlobalConfig;
-import com.aominfosystem.dto.MyBatisUtil;
+import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.mapper.GroupserviceslistMapper;
 import com.aominfosystem.pojo.Groupserviceslist;
 import com.sobte.cqp.jcq.entity.IMsg;
@@ -47,7 +47,7 @@ public class MessageController implements IMsg {
             Boolean inOnlinBlacklist = false;
 
 
-            SqlSession session = MyBatisUtil.getSqlSession();
+            SqlSession session = MyBatisUtil.getSession();
             GroupserviceslistMapper groupserviceslistMapper = session.getMapper(GroupserviceslistMapper.class);
             List<Groupserviceslist> list = groupserviceslistMapper.findAll();
             session.close();

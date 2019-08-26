@@ -1,28 +1,6 @@
 package com.aominfosystem;
 
-import com.aominfosystem.dto.MyBatisUtil;
-import com.aominfosystem.mapper.GrouprecordMapper;
-import com.aominfosystem.mapper.NoteMapper;
-import com.aominfosystem.pojo.Grouprecord;
-import com.aominfosystem.pojo.Note;
-import com.aominfosystem.utils.OpenBrowserUtils;
-import com.aominfosystem.utils.TypeTesting;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import org.apache.ibatis.session.SqlSession;
-import org.aspectj.weaver.ast.Not;
-
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
-import static com.aominfosystem.utils.DownLoadUtils.downLoadFromUrl;
 
 /**
  * @author: create by admin

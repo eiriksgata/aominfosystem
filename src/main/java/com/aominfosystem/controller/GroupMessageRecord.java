@@ -2,14 +2,13 @@ package com.aominfosystem.controller;
 
 
 import com.aominfosystem.config.CreateSystemFile;
-import com.aominfosystem.dto.MyBatisUtil;
+import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.mapper.GrouprecordMapper;
 import com.aominfosystem.pojo.Grouprecord;
 import com.sobte.cqp.jcq.entity.Member;
 import org.apache.ibatis.session.SqlSession;
 import com.aominfosystem.controller.cofig.GroupMessageCofig;
 
-import javax.annotation.Resource;
 import java.sql.Timestamp;
 
 import static com.aominfosystem.config.GlobalConfig.recordSwitch;
@@ -57,7 +56,7 @@ public class GroupMessageRecord {
 
             if (saveOrNot && msg.length() < 500) {
 
-                SqlSession sqlSession = MyBatisUtil.getSqlSession();
+                SqlSession sqlSession = MyBatisUtil.getSession();
                 GrouprecordMapper grouprecordMapper = sqlSession.getMapper(GrouprecordMapper.class);
 
                 for (int i = 0; i < GroupMessageCofig.monitoringGroupNumber.length; i++) {

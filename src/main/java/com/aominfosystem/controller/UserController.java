@@ -1,7 +1,7 @@
 package com.aominfosystem.controller;
 
 
-import com.aominfosystem.dto.MyBatisUtil;
+import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.mapper.UserMapper;
 import com.aominfosystem.pojo.User;
 import org.apache.ibatis.session.SqlSession;
@@ -22,7 +22,7 @@ public class UserController {
     }
 
     public User findUser(long fromqq){
-        SqlSession sqlSession = MyBatisUtil.getSqlSession();
+        SqlSession sqlSession = MyBatisUtil.getSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         User user = userMapper.findByFromqq(fromqq);
         return user;

@@ -1,7 +1,7 @@
 package com.aominfosystem.pulg;
 
 import com.aominfosystem.controller.UserController;
-import com.aominfosystem.dto.MyBatisUtil;
+import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.mapper.NoteMapper;
 import com.aominfosystem.mapper.UserMapper;
 import com.aominfosystem.pojo.Note;
@@ -119,7 +119,7 @@ public class NoteFunction {
 
         if (pass.get("grade") && pass.get("title") && pass.get("hide") && pass.get("text")) {
             result = "信息录入成功";
-            SqlSession sqlSession = MyBatisUtil.getSqlSession();
+            SqlSession sqlSession = MyBatisUtil.getSession();
             NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
             noteMapper.save(note);
             sqlSession.commit();
@@ -138,7 +138,7 @@ public class NoteFunction {
         if (new TypeTesting().isInt(parameter)) {
             try {
                 Integer deleteId = Integer.valueOf(parameter);
-                SqlSession sqlSession = MyBatisUtil.getSqlSession();
+                SqlSession sqlSession = MyBatisUtil.getSession();
                 NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
                 UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
@@ -182,7 +182,7 @@ public class NoteFunction {
         if (new TypeTesting().isInt(parameter)) {
             try {
                 Integer findId = Integer.valueOf(parameter);
-                SqlSession sqlSession = MyBatisUtil.getSqlSession();
+                SqlSession sqlSession = MyBatisUtil.getSession();
                 NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
                 UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
                 Note note = noteMapper.findByid(findId);
@@ -222,7 +222,7 @@ public class NoteFunction {
         String result = "";
         if (new TypeTesting().isInt(parameter)) {
             Integer startPage = Integer.valueOf(parameter);
-            SqlSession sqlSession = MyBatisUtil.getSqlSession();
+            SqlSession sqlSession = MyBatisUtil.getSession();
             NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
             PageHelper.startPage(startPage, 10);
             List<Note> allData = noteMapper.findAll();
