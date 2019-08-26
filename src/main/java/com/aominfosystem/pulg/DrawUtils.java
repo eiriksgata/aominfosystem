@@ -1,15 +1,18 @@
-package com.aominfosystem.utils;
+package com.aominfosystem.pulg;
 
 
 import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.model.CardGroupFile;
+import com.aominfosystem.utils.ImportInfoFromText;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class DrawUtils {
 
-    private List<CardGroupFile> cardList = new ArrayList<CardGroupFile>();
+    private static List<CardGroupFile> cardList = new ArrayList<CardGroupFile>();
+
 
     public DrawUtils() {
         cardList = ImportInfoFromText.readFromText(CreateSystemFile.folderName+ "\\" +"CardGroupDate.txt");
@@ -28,7 +31,7 @@ public class DrawUtils {
         }
     }
 
-    public String drawStart() {
+    public static String drawStart() {
         String result = "";
 
         double random = Math.random();

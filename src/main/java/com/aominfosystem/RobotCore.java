@@ -9,6 +9,7 @@ import com.aominfosystem.utils.ConfigurationFile;
 import com.aominfosystem.utils.OpenBrowserUtils;
 import com.sobte.cqp.jcq.entity.*;
 import com.sobte.cqp.jcq.event.JcqAppAbstract;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
@@ -46,8 +47,7 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         //System.out.println(CQ.getAppDirectory());
        // 模拟群聊消息
         // 开始模拟群聊消息
-        demo.groupMsg(0, 10006, 123456, 77777, "", ">_record", 0);
-        demo.groupMsg(0, 10007, 123456, 77777, "", "hi", 0);
+        demo.groupMsg(0, 10007, 123456, 77777, "", ">_notedelete 6", 0);
         demo.groupMsg(0, 10008, 123456, 77777, "", "you good", 0);
         // ......
         // 依次类推，可以根据实际情况修改参数，和方法测试效果

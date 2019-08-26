@@ -1,6 +1,7 @@
-package com.aominfosystem.pulg;
+package com.aominfosystem.pulg.impl;
 
 import com.aominfosystem.controller.UserController;
+import com.aominfosystem.pulg.NotePulg;
 import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.mapper.NoteMapper;
 import com.aominfosystem.mapper.UserMapper;
@@ -10,6 +11,9 @@ import com.aominfosystem.utils.TypeTesting;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +21,7 @@ import java.util.Map;
 
 import static com.aominfosystem.utils.RegularExpressionUtils.getMatchers;
 
-public class NoteFunction {
-
+public class NotePulgImpl implements NotePulg {
 
     /**
      * 笔记功能使用
@@ -27,7 +30,7 @@ public class NoteFunction {
      * @param fromqq
      * @return
      */
-    public static String noteControl(String parameter, long fromqq) {
+    public String noteControl(String parameter, long fromqq) {
 
         //正则表达式
         String regex = "-.*?<";
@@ -132,8 +135,8 @@ public class NoteFunction {
         return result;
     }
 
-
-    public static String deleteNote(String parameter, long fromqq) {
+    @Override
+    public String deleteNote(String parameter, long fromqq) {
         String result = "";
         if (new TypeTesting().isInt(parameter)) {
             try {
@@ -144,7 +147,6 @@ public class NoteFunction {
 
                 Note note = noteMapper.findByid(deleteId);
                 User findUser = userMapper.findByFromqq(fromqq);
-                sqlSession.close();
                 long userGrade;
                 if (findUser == null) {
                     userGrade = 0;
@@ -156,8 +158,10 @@ public class NoteFunction {
                     if (userGrade >= note.getGrade()) {
                         try {
                             noteMapper.delete(deleteId);
+                            sqlSession.commit();
                             result += "删除成功";
                         } catch (Exception e) {
+
                             result += "删除记录出错，数据库数据异常";
                         }
                     } else {
@@ -168,6 +172,8 @@ public class NoteFunction {
                     result += "查询不到该条数据（可能原因：错误的索引号)";
                 }
 
+                sqlSession.close();
+
             } catch (Exception e) {
                 System.out.println(e);
                 result += "删除出错 具体原因：" + e.toString();
@@ -176,8 +182,8 @@ public class NoteFunction {
         return result;
 
     }
-
-    public static String openNote(String parameter, long fromqq) {
+    @Override
+    public String openNote(String parameter, long fromqq) {
         String result = "";
         if (new TypeTesting().isInt(parameter)) {
             try {
@@ -218,7 +224,8 @@ public class NoteFunction {
         return result;
     }
 
-    public static String findNoteList(String parameter, long fromqq) {
+    @Override
+    public String findNoteList(String parameter, long fromqq) {
         String result = "";
         if (new TypeTesting().isInt(parameter)) {
             Integer startPage = Integer.valueOf(parameter);
@@ -244,7 +251,8 @@ public class NoteFunction {
      *
      * @return
      */
-    public static String returnNotehelpMessage() {
+    @Override
+    public String returnNotehelpMessage() {
         String result = "";
         result = "Note功能介绍:\n" +
                 "使用指令>_note\n" +

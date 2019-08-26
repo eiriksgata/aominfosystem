@@ -1,9 +1,6 @@
 package com.aominfosystem.utils;
 
 import com.aominfosystem.model.CardGroupFile;
-import com.aominfosystem.pojo.Cardgroup;
-
-import java.io.*;
 
 
 import java.io.FileNotFoundException;

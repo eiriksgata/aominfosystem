@@ -3,21 +3,24 @@ package com.aominfosystem.controller;
 
 import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.controller.cofig.InstructionsConfig;
+import com.aominfosystem.pulg.DrawUtils;
+import com.aominfosystem.pulg.NotePulg;
+import com.aominfosystem.pulg.impl.NotePulgImpl;
 import com.aominfosystem.utils.ConfigurationFile;
-import com.aominfosystem.utils.DrawUtils;
 import com.aominfosystem.utils.RegularExpressionUtils;
+import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 
-import static com.aominfosystem.pulg.NoteFunction.*;
 import static com.sobte.cqp.jcq.event.JcqApp.CC;
 
-
 public class Instructions {
-    @Resource
-    DrawUtils drawUtils;
+
+
+    private NotePulgImpl notePulg = new NotePulgImpl();
+
     private boolean drawCooling = true;
     public static boolean recordOpen = false;
 
@@ -58,15 +61,15 @@ public class Instructions {
                 case "link":
                     return returnLinkMessage();
                 case "note":
-                    return noteControl(parameter, fromqq);
+                    return notePulg.noteControl(parameter, fromqq);
                 case "notehelp":
-                    return returnNotehelpMessage();
+                    return notePulg.returnNotehelpMessage();
                 case "notefind":
-                    return findNoteList(parameter, fromqq);
+                    return notePulg.findNoteList(parameter, fromqq);
                 case "noteopen":
-                    return openNote(parameter, fromqq);
+                    return notePulg.openNote(parameter, fromqq);
                 case "notedelete":
-                    return deleteNote(parameter, fromqq);
+                    return notePulg.deleteNote(parameter, fromqq);
                 case "draw":
                     return draw(fromGroup, fromqq);
                 case "record":
@@ -111,7 +114,7 @@ public class Instructions {
             } else {
                 Timer timer = new Timer();
                 long time = 2000;
-                String resultDraw = CC.at(fromqq) + drawUtils.drawStart();
+                String resultDraw = CC.at(fromqq) + DrawUtils.drawStart();
 
                 try {
                     String result = ConfigurationFile.readCfgValue(filePath, "Draw", "drawCooling", "2000");
