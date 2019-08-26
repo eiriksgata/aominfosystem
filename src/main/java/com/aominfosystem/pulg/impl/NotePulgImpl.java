@@ -30,6 +30,7 @@ public class NotePulgImpl implements NotePulg {
      * @param fromqq
      * @return
      */
+    @Override
     public String noteControl(String parameter, long fromqq) {
 
         //正则表达式
@@ -49,7 +50,12 @@ public class NotePulgImpl implements NotePulg {
         //记录默认值
         Note note = new Note();
         note.setGrade(0);
-        note.setCreator(String.valueOf(user.getId()));
+        if (user == null){
+            note.setCreator(String.valueOf(fromqq));
+        }else {
+            note.setCreator("LC-" + String.valueOf(user.getId()));
+        }
+
         note.setHide("");
         note.setText("");
         note.setTitle("error title");
@@ -180,8 +186,9 @@ public class NotePulgImpl implements NotePulg {
             }
         }
         return result;
-
     }
+
+
     @Override
     public String openNote(String parameter, long fromqq) {
         String result = "";
