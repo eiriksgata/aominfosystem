@@ -1,0 +1,6 @@
+[member.getNick()]>_record
+[member.getNick()]hi
+[member.getNick()]you good
+[测试专属头衔]>_record
+[测试专属头衔]hi
+[测试专属头衔]you good
