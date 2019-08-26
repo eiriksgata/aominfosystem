@@ -47,7 +47,7 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         //System.out.println(CQ.getAppDirectory());
        // 模拟群聊消息
         // 开始模拟群聊消息
-        demo.groupMsg(0, 10007, 123456, 77777, "", ">_notedelete 6", 0);
+        demo.groupMsg(0, 10007, 123456, 77777, "", ">_note -grade<0>-title<[This Title]>-text< Hi,welcome>", 0);
         demo.groupMsg(0, 10008, 123456, 77777, "", "you good", 0);
         // ......
         // 依次类推，可以根据实际情况修改参数，和方法测试效果

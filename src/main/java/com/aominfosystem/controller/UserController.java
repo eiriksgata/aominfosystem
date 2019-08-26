@@ -25,6 +25,7 @@ public class UserController {
         SqlSession sqlSession = MyBatisUtil.getSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         User user = userMapper.findByFromqq(fromqq);
+        MyBatisUtil.closeSession();
         return user;
     }
 }

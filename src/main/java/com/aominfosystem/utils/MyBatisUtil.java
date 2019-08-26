@@ -16,7 +16,7 @@ public enum MyBatisUtil {
 
     static {
         String resource = "mybatisConf.xml";
-        Reader reader = null;
+        Reader reader;
         try {
             reader = Resources.getResourceAsReader(resource);
             sessionFactory = new SqlSessionFactoryBuilder().build(reader);

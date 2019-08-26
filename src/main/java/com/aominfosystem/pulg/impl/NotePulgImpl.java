@@ -44,15 +44,17 @@ public class NotePulgImpl implements NotePulg {
         pass.put("title", false);
         pass.put("hide", true);
         pass.put("text", true);
-        User user = new UserController().findUser(fromqq);
-
-        long userGrade = user.getGrade();
+        UserController userController = new UserController();
+        User user = userController.findUser(fromqq);
+        long userGrade;
         //记录默认值
         Note note = new Note();
         note.setGrade(0);
         if (user == null){
             note.setCreator(String.valueOf(fromqq));
+            userGrade = 0;
         }else {
+            userGrade = user.getGrade();
             note.setCreator("LC-" + String.valueOf(user.getId()));
         }
 
@@ -67,19 +69,19 @@ public class NotePulgImpl implements NotePulg {
                 try {
                     if (new TypeTesting().isInt(valueList.get(i).substring(1, valueList.get(i).length() - 1))) {
                         long value = Long.valueOf(valueList.get(i).substring(1, valueList.get(i).length() - 1));
-                        if (userGrade >= value && userGrade > 0) {
+                        if (userGrade >= value && userGrade >= 0) {
                             note.setGrade(value);
                             pass.put("grade", true);
                         } else {
-                            result += "\n你的权限等级无法设置文本等级";
+                            result = "\n你的权限等级无法设置文本等级";
                         }
                     } else {
-                        result += "\ngrade的数值不正确";
+                        result = "\ngrade的数值不正确";
                     }
 
                 } catch (Exception e) {
-                    System.out.println(e);
-                    result += "\n请输入正确的数值范围，请不要尝试玩弄小把戏" + e.toString();
+                    System.out.println(e.toString());
+                    result = "\n请输入正确的数值范围，请不要尝试玩弄小把戏" + e.toString();
                 }
             }
             if (instructionsList.get(i).substring(1, instructionsList.get(i).length() - 1).equals("title")) {
@@ -90,10 +92,10 @@ public class NotePulgImpl implements NotePulg {
                         pass.put("title", true);
 
                     } else {
-                        result += "\n标题文本为空,title为必填项";
+                        result = "\n标题文本为空,title为必填项";
                     }
                 } catch (Exception e) {
-                    result += "\n标题输入格式不正确,异常原因有待检测";
+                    result = "\n标题输入格式不正确,异常原因有待检测";
                 }
             }
             if (instructionsList.get(i).substring(1, instructionsList.get(i).length() - 1).equals("hide")) {
@@ -106,7 +108,7 @@ public class NotePulgImpl implements NotePulg {
                     }
                     pass.put("hide", true);
                 } catch (Exception e) {
-                    result += "隐藏内容录入异常，已终止录入本条信息";
+                    result = "隐藏内容录入异常，已终止录入本条信息";
                 }
 
             }
@@ -121,7 +123,7 @@ public class NotePulgImpl implements NotePulg {
                     pass.put("text", true);
 
                 } catch (Exception e) {
-                    result += "文本内容录入异常，已终止信息录入";
+                    result = "文本内容录入异常，已终止信息录入";
                 }
             }
         }
@@ -130,9 +132,16 @@ public class NotePulgImpl implements NotePulg {
             result = "信息录入成功";
             SqlSession sqlSession = MyBatisUtil.getSession();
             NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-            noteMapper.save(note);
-            sqlSession.commit();
-            sqlSession.close();
+            try {
+                noteMapper.save(note);
+                sqlSession.commit();
+            }catch (Exception e){
+                System.out.println(e.toString());
+            }finally {
+                MyBatisUtil.closeSession();
+            }
+
+
         } else {
             result += "\n" + pass.toString();
 
@@ -178,7 +187,7 @@ public class NotePulgImpl implements NotePulg {
                     result += "查询不到该条数据（可能原因：错误的索引号)";
                 }
 
-                sqlSession.close();
+                MyBatisUtil.closeSession();
 
             } catch (Exception e) {
                 System.out.println(e);
@@ -200,7 +209,7 @@ public class NotePulgImpl implements NotePulg {
                 UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
                 Note note = noteMapper.findByid(findId);
                 User findUser = userMapper.findByFromqq(fromqq);
-                sqlSession.close();
+                MyBatisUtil.closeSession();
                 long userGrade;
                 //判断是否是游客用户
                 if (findUser == null) {
