@@ -4,25 +4,28 @@ package com.aominfosystem.controller;
 import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.controller.cofig.InstructionsConfig;
 import com.aominfosystem.pulg.DrawUtils;
-import com.aominfosystem.pulg.NotePulg;
+import com.aominfosystem.pulg.MusicPulg;
+import com.aominfosystem.pulg.impl.MusicPulgImpl;
 import com.aominfosystem.pulg.impl.NotePulgImpl;
 import com.aominfosystem.utils.ConfigurationFile;
+import com.aominfosystem.utils.HttpClientUtils;
 import com.aominfosystem.utils.RegularExpressionUtils;
-import org.springframework.stereotype.Controller;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 
 import static com.sobte.cqp.jcq.event.JcqApp.CC;
+import static com.sobte.cqp.jcq.event.JcqApp.CQ;
 
 public class Instructions {
 
 
     private NotePulgImpl notePulg = new NotePulgImpl();
+    private MusicPulgImpl musicPulg = new MusicPulgImpl();
 
     private boolean drawCooling = true;
     public static boolean recordOpen = false;
+
 
     public Instructions() {
 
@@ -62,20 +65,30 @@ public class Instructions {
                     return returnLinkMessage();
                 case "note":
                     return notePulg.noteControl(parameter, fromqq);
-                case "notehelp":
+                case "noteHelp":
                     return notePulg.returnNotehelpMessage();
-                case "notefind":
+                case "noteFind":
                     return notePulg.findNoteList(parameter, fromqq);
-                case "noteopen":
+                case "noteOpen":
                     return notePulg.openNote(parameter, fromqq);
-                case "notedelete":
+                case "noteDelete":
                     return notePulg.deleteNote(parameter, fromqq);
                 case "draw":
                     return draw(fromGroup, fromqq);
                 case "record":
                     return recordManegr();
-                case "recordhelp":
+                case "recordHelp":
                     return returnRecordHelpInfo();
+                case "get":
+                    return httpGetFunction(parameter);
+                case "repetition":
+                    return repetitionMesaage(parameter);
+                case "musicPlay":
+                    return musicPulg.musicPlay(parameter,fromqq);
+                case "musicFind":
+                    return musicPulg.musicFind(parameter,fromqq);
+                case "musicHelp":
+                    return musicPulg.returnMusicHelpMessage();
                 default:
                     return "不太清楚您输的什么指令呢";
             }
@@ -83,6 +96,23 @@ public class Instructions {
             return null;
         }
     }
+
+
+
+    private String repetitionMesaage(String parmeter){
+        return parmeter;
+    }
+
+    private String httpGetFunction(String parameter){
+        String result = "";
+        try {
+           result = HttpClientUtils.doGet(parameter).getContent();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     public String returnRecordHelpInfo(){
         String result = "输入>_record后系统将会在后台激活消息记录状态，将会记录接收到的群消息。如果localMessageRecord目录没有那么系统将会创建。" +
@@ -179,10 +209,14 @@ public class Instructions {
                 "\n指令使用格式为：>_help 触发指令前提为>_" +
                 "\n>_help:帮助指令" +
                 "\n>_link:链接指令，返回一些链接" +
-                "\n*>_notehelp:笔记帮助功能，里面介绍了具体的各个功能使用方法" +
+                "\n*>_noteHelp:笔记帮助功能，里面介绍了具体的各个功能使用方法" +
                 "\n>_draw:抽奖指令" +
-                "\n>_rocordhelp:显示消息记录帮助信息" +
-                "\n(带有*的功能需要开启远程连接才能使用)";
+                "\n>_recordHelp:显示消息记录帮助信息" +
+                "\n>_get X:使用HTTP的Get请求，X为访问地址，返回JSON数据" +
+                "\n>_musicHelp:详细的介绍了点歌功能的使用" +
+                "\n+>_post X:post请求" +
+                "\n(带有*的功能需要开启联网才能使用,带有+尚未开放的功能)" +
+                "\n当前版本号为 1.0.2 使用>_link查看更新内容";
         return result;
     }
 
@@ -196,7 +230,8 @@ public class Instructions {
         result = "1.插件后台系统进入操作界面:localhost:5424\n" +
                 "2.作者博客网址:http://134.175.43.199/\n" +
                 "4.web工具（目前有凯撒密码自动分析工具、任意进制转换）:https://keith404.gitee.io/tool/\n" +
-                "5.测试数据生成工具（生成身份证等信息，支持接口信息返回）:http://134.175.148.53:8091/datageneration-Base/\n";
+                "5.测试数据生成工具（生成身份证等信息，支持接口信息返回）:http://134.175.148.53:8091/datageneration-Base/\n" +
+                "当前版本:1.0.2.RELEASE:";
 
         return result;
     }

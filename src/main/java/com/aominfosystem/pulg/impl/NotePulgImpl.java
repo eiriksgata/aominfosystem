@@ -11,9 +11,6 @@ import com.aominfosystem.utils.TypeTesting;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +66,7 @@ public class NotePulgImpl implements NotePulg {
                 try {
                     if (new TypeTesting().isInt(valueList.get(i).substring(1, valueList.get(i).length() - 1))) {
                         long value = Long.valueOf(valueList.get(i).substring(1, valueList.get(i).length() - 1));
-                        if (userGrade >= value && userGrade >= 0) {
+                        if (userGrade >= value && userGrade > 0) {
                             note.setGrade(value);
                             pass.put("grade", true);
                         } else {
@@ -190,7 +187,7 @@ public class NotePulgImpl implements NotePulg {
                 MyBatisUtil.closeSession();
 
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println(e.toString());
                 result += "删除出错 具体原因：" + e.toString();
             }
         }
@@ -232,7 +229,7 @@ public class NotePulgImpl implements NotePulg {
                     result += "不好意思，没有这个记录（可能原因：已删除，被隐藏，权限不够，错误编号）";
                 }
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println(e.toString());
                 result += "检测到未知错误类型:" + e;
             }
 
@@ -242,24 +239,24 @@ public class NotePulgImpl implements NotePulg {
 
     @Override
     public String findNoteList(String parameter, long fromqq) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         if (new TypeTesting().isInt(parameter)) {
-            Integer startPage = Integer.valueOf(parameter);
+            int startPage = Integer.parseInt(parameter);
             SqlSession sqlSession = MyBatisUtil.getSession();
             NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
             PageHelper.startPage(startPage, 10);
             List<Note> allData = noteMapper.findAll();
             if (allData != null) {
                 PageInfo<Note> pageInfo = new PageInfo<Note>(allData);
-                result += "索引";
+                result.append("索引");
                 for (int i = 0; i < pageInfo.getSize(); i++) {
-                    result += "\n" + "[" + pageInfo.getList().get(i).getId() + "]" + pageInfo.getList().get(i).getTitle();
+                    result.append("\n" + "[").append(pageInfo.getList().get(i).getId()).append("]").append(pageInfo.getList().get(i).getTitle());
                 }
             } else {
-                result += "当前查询页无数据";
+                result.append("当前查询页无数据");
             }
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -280,9 +277,9 @@ public class NotePulgImpl implements NotePulg {
                 "具体使用操作如下:\n" +
                 ">_note -grade<0>-title<[This Title]>-text< Hi,welcome >" +
                 "\n其他指令:" +
-                "\n>_notedelete X:删除指定索引的笔记内容" +
-                "\n>_noteopen X:打开note的内容,X为打开的笔记编号值,使用方法>_opennote 2" +
-                "\n>_notefind X:查询功能的一种，用于查询笔记索引,X为查询页数,使用方法>_findnote 0,这样返回第一页的内容" +
+                "\n>_noteDelete X:删除指定索引的笔记内容" +
+                "\n>_noteOpen X:打开note的内容,X为打开的笔记编号值,使用方法>_noteOpen 2" +
+                "\n>_noteFind X:查询功能的一种，用于查询笔记索引,X为查询页数,使用方法>_noteFind 0,这样返回第一页的内容" +
                 "";
         return result;
     }

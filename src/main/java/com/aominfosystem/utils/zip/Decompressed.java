@@ -62,6 +62,7 @@ public class Decompressed {
                     fos.close();
                     is.close();
                     srcFile.delete();
+
                 }
             }
             long end = System.currentTimeMillis();
