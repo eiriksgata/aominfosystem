@@ -1,0 +1,2 @@
+aominfosystem
+在酷Q平台上使用JCQ编写的一个插件
