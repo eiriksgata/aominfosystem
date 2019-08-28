@@ -140,7 +140,6 @@
         </dependency>
 
 
-
         <dependency>
             <groupId>com.sobte.cqp</groupId>
             <artifactId>jcq-coolq</artifactId>
@@ -224,7 +223,6 @@
         <!-- log end -->
 
 
-
     </dependencies>
 
     <build>
@@ -271,6 +269,11 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
         </plugins>
     </build>
 
