@@ -228,7 +228,7 @@ public class Instructions {
     public String returnLinkMessage() {
         String result;
         result = "1.插件后台系统进入操作界面:localhost:5424\n" +
-                "2.作者博客网址:http://134.175.43.199/\n" +
+                "2.作者博客网址:https://eiriksgata.home.blog\n" +
                 "4.web工具（目前有凯撒密码自动分析工具、任意进制转换）:https://keith404.gitee.io/tool/\n" +
                 "5.测试数据生成工具（生成身份证等信息，支持接口信息返回）:http://134.175.148.53:8091/datageneration-Base/\n" +
                 "当前版本:1.0.2.RELEASE:";

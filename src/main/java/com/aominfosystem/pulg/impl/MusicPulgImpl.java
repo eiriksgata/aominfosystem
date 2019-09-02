@@ -1,8 +1,11 @@
 package com.aominfosystem.pulg.impl;
 
+import com.aominfosystem.json.searchbean.SearchBeanVo;
+import com.aominfosystem.json.searchbean.SongList;
 import com.aominfosystem.pulg.MusicPulg;
 import com.aominfosystem.utils.HttpClientUtils;
 import com.aominfosystem.utils.RegularExpressionUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,11 +22,8 @@ import static com.sobte.cqp.jcq.event.JcqApp.CQ;
  **/
 public class MusicPulgImpl implements MusicPulg {
 
-    private String supportType[] = {"qq","163"};
-    private String findAPIUrl[] = {
-            "https://v1.itooi.cn/tencent/search",
-            "https://v1.itooi.cn/netease/search"
-    };
+    private String supportType[] = {"qq","netease","xiami"};
+    private String findAIPHost= "http://134.175.43.199/datageneration-Base/music/api/";
 
     //网易云 QQ 通用需格式化
     private String regexMusicId = "\"id\":\".*?\"";//5 -1 id
@@ -34,7 +34,7 @@ public class MusicPulgImpl implements MusicPulg {
     public String musicPlay(String parameter, long fromqq) {
         String result = "";
         String openType[] = supportType;
-        String type = "163";
+        String type = "netease";
         long musicId = 31010566;
         //字符串处理
         String strlist[] = parameter.split(",");
@@ -42,7 +42,7 @@ public class MusicPulgImpl implements MusicPulg {
         if (strlist.length > 0) {
             if (strlist.length > 1) {
                 //暂时关闭qq查询
-                if (strlist[0].equals("qq")){
+                if (!strlist[0].equals("qq")){
                     for (String anOpenType : openType) {
                         if (anOpenType.equals(strlist[0])) {
                             type = strlist[0];
@@ -61,7 +61,7 @@ public class MusicPulgImpl implements MusicPulg {
                         CQ.logInfoRecv("用户错误的输入", "musicPlay Function input format error");
                     }
                 }else {
-                    result = "暂时不支持QQ播放，目前检测到API都已经挂了";
+                    result = "暂时不支持QQ播放，播放接口已经改变";
                 }
 
 
@@ -81,9 +81,10 @@ public class MusicPulgImpl implements MusicPulg {
 
         String findType = supportType[0];
         String inputType = "song";
-        String findApi = findAPIUrl[0];
-        int pageSize = 5;
-        int page = 0;
+        String findApiHost = findAIPHost;
+        String operationType = "search";
+        int limit = 5;
+        int page = 1;
 
         StringBuilder apiResultStr = new StringBuilder();
         StringBuilder functionResult = new StringBuilder();
@@ -98,38 +99,45 @@ public class MusicPulgImpl implements MusicPulg {
             for (int i=0;i<supportType.length;i++){
                 if (supportType[i].equals(strlist[0])){
                     findType = supportType[i];
-                    findApi = findAPIUrl[i];
                     break;
                 }
             }
 
             //http请求接口
             try {
-
                 //处理url
-                findApi = findApi + "?keyword=" + strlist[1] + "&type=" + inputType + "&pageSize=" + pageSize + "&page=" + page + "&format=1";
-                apiResultStr.append(HttpClientUtils.doGet(findApi).getContent());
-                //System.out.println(apiResultStr);
+                ObjectMapper mapper = new ObjectMapper();
+                SearchBeanVo searchBeanVo;
+                String apiUrl = findApiHost + operationType + "/" + inputType + "/" + findType  + "?key=" +
+                        strlist[1] + "&limit=" + limit + "&page=" + page;
 
-                List<String> musicId = RegularExpressionUtils.getMatchers(regexMusicId,apiResultStr.toString());
-                List<String> musicName =RegularExpressionUtils.getMatchers(regexMusicName,apiResultStr.toString());
-                List<String> musicSinger =RegularExpressionUtils.getMatchers(regexMusicSinger,apiResultStr.toString());
+                //findApi = findApi + "?keyword=" + strlist[1] + "&type=" + inputType + "&pageSize=" + pageSize + "&page=" + page + "&format=1";
+                //System.out.println(apiUrl);
 
-                if (musicId.size() == musicName.size()&& musicId.size() == musicSinger.size()){
+                apiResultStr.append(HttpClientUtils.doGet(apiUrl).getContent());
+                searchBeanVo = mapper.readValue(apiResultStr.toString(),SearchBeanVo.class);
+                List<SongList> searchSongList = searchBeanVo.getSongList();
+
+                if (searchBeanVo.getSongList().size()>0){
                     functionResult.append("搜索到排行前5首歌曲");
                     functionResult.append("\n歌曲ID/歌曲名称/作者\n");
                     //整理返回的消息数据
-                    for (int i=0;i<musicId.size();i++){
+                    for (int i=0;i<searchBeanVo.getSongList().size();i++){
                         //筛选字符串
-                        functionResult.append("[").append(musicId.get(i).substring(6,musicId.get(i).length()-1)).append("][")
-                                .append(musicName.get(i).substring(8,musicName.get(i).length()-1)).append("][")
-                                .append(musicSinger.get(i).substring(9,musicSinger.get(i).length()-1))
-                                .append("]\n");
+                        functionResult.append("[").append(searchSongList.get(i).getId()).append("][")
+                                .append(searchSongList.get(i).getName()).append("][");
+                        for (int j=0;j<searchBeanVo.getSongList().get(i).getArtists().size();j++){
+                            functionResult.append(searchSongList.get(i).getArtists().get(j).getName());
+                            if (j!=searchSongList.get(i).getArtists().size()-1){
+                                functionResult.append(",");
+                            }
+                        }
+                        functionResult.append("]\n");
                     }
                     functionResult.append("[通过>_musicPlay ")
                             .append(findType)
                             .append(",")
-                            .append(musicId.get(0).substring(6,musicId.get(0).length()-1))
+                            .append(searchSongList.get(0).getId())
                             .append("这样的形式进行点歌]");
 
                 }else {
@@ -172,10 +180,10 @@ public class MusicPulgImpl implements MusicPulg {
         StringBuilder helpStr = new StringBuilder();
         helpStr.append("欢迎使用>_musicHelp指令，歌曲的指令使用情况如下:")
                 .append("\n>_musicPlay X,Y X字符为点歌的类型，Y为歌曲ID号（目前只允许使用网易云音乐播放")
-                .append("\n>_musicFind X,Y X为查询的平台，目前开放为qq,163")
-                .append("\n163则是网易云音乐平台，qq则为qq音乐平台。目前只允许这两种的查询方式,Y则为查询的歌曲关键字")
-                .append("\n例如：>_musicPlay 163,31010566")
-                .append("\n>_musicFind 163,Sold Out")
+                .append("\n>_musicFind X,Y X为查询的平台，目前开放为qq,netease,xiami")
+                .append("\nnetease则是网易云音乐平台，qq则为qq音乐平台,xiami为虾米音乐。目前只允许这些的查询方式,Y则为查询的歌曲关键字")
+                .append("\n例如：>_musicPlay netease,31010566")
+                .append("\n>_musicFind netease,Sold Out")
                 .append("\n尚未开通的功能：")
                 .append("\n+歌曲下载链接")
                 .append("\n+音乐播放列表")
