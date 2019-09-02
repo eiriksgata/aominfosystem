@@ -22,7 +22,8 @@ import static com.sobte.cqp.jcq.event.JcqApp.CQ;
  **/
 public class MusicPulgImpl implements MusicPulg {
 
-    private String supportType[] = {"qq","netease","xiami"};
+    private String supportType[] = {"qq","163","xiami"};
+    private String urlSupportType[] = {"qq","netease","xiami"};
     private String findAIPHost= "http://134.175.43.199/datageneration-Base/music/api/";
 
     //网易云 QQ 通用需格式化
@@ -34,7 +35,7 @@ public class MusicPulgImpl implements MusicPulg {
     public String musicPlay(String parameter, long fromqq) {
         String result = "";
         String openType[] = supportType;
-        String type = "netease";
+        String type = "163";
         long musicId = 31010566;
         //字符串处理
         String strlist[] = parameter.split(",");
@@ -83,6 +84,7 @@ public class MusicPulgImpl implements MusicPulg {
         String inputType = "song";
         String findApiHost = findAIPHost;
         String operationType = "search";
+        String urlSupportType = "netease";
         int limit = 5;
         int page = 1;
 
@@ -99,6 +101,7 @@ public class MusicPulgImpl implements MusicPulg {
             for (int i=0;i<supportType.length;i++){
                 if (supportType[i].equals(strlist[0])){
                     findType = supportType[i];
+                    urlSupportType = supportType[i];
                     break;
                 }
             }
@@ -108,7 +111,7 @@ public class MusicPulgImpl implements MusicPulg {
                 //处理url
                 ObjectMapper mapper = new ObjectMapper();
                 SearchBeanVo searchBeanVo;
-                String apiUrl = findApiHost + operationType + "/" + inputType + "/" + findType  + "?key=" +
+                String apiUrl = findApiHost + operationType + "/" + inputType + "/" + urlSupportType  + "?key=" +
                         strlist[1] + "&limit=" + limit + "&page=" + page;
 
                 //findApi = findApi + "?keyword=" + strlist[1] + "&type=" + inputType + "&pageSize=" + pageSize + "&page=" + page + "&format=1";
@@ -180,10 +183,10 @@ public class MusicPulgImpl implements MusicPulg {
         StringBuilder helpStr = new StringBuilder();
         helpStr.append("欢迎使用>_musicHelp指令，歌曲的指令使用情况如下:")
                 .append("\n>_musicPlay X,Y X字符为点歌的类型，Y为歌曲ID号（目前只允许使用网易云音乐播放")
-                .append("\n>_musicFind X,Y X为查询的平台，目前开放为qq,netease,xiami")
-                .append("\nnetease则是网易云音乐平台，qq则为qq音乐平台,xiami为虾米音乐。目前只允许这些的查询方式,Y则为查询的歌曲关键字")
-                .append("\n例如：>_musicPlay netease,31010566")
-                .append("\n>_musicFind netease,Sold Out")
+                .append("\n>_musicFind X,Y X为查询的平台，目前开放为qq,163,xiami")
+                .append("\n163则是网易云音乐平台，qq则为qq音乐平台,xiami为虾米音乐。目前只允许这些的查询方式,Y则为查询的歌曲关键字")
+                .append("\n例如：>_musicPlay 163,31010566")
+                .append("\n>_musicFind 163,Sold Out")
                 .append("\n尚未开通的功能：")
                 .append("\n+歌曲下载链接")
                 .append("\n+音乐播放列表")
