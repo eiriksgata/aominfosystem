@@ -84,7 +84,7 @@ public class MusicPulgImpl implements MusicPulg {
         String inputType = "song";
         String findApiHost = findAIPHost;
         String operationType = "search";
-        String urlSupportType = "netease";
+        String urlSupport = "netease";
         int limit = 5;
         int page = 1;
 
@@ -101,7 +101,7 @@ public class MusicPulgImpl implements MusicPulg {
             for (int i=0;i<supportType.length;i++){
                 if (supportType[i].equals(strlist[0])){
                     findType = supportType[i];
-                    urlSupportType = supportType[i];
+                    urlSupport = urlSupportType[i];
                     break;
                 }
             }
@@ -111,7 +111,7 @@ public class MusicPulgImpl implements MusicPulg {
                 //处理url
                 ObjectMapper mapper = new ObjectMapper();
                 SearchBeanVo searchBeanVo;
-                String apiUrl = findApiHost + operationType + "/" + inputType + "/" + urlSupportType  + "?key=" +
+                String apiUrl = findApiHost + operationType + "/" + inputType + "/" + urlSupport  + "?key=" +
                         strlist[1] + "&limit=" + limit + "&page=" + page;
 
                 //findApi = findApi + "?keyword=" + strlist[1] + "&type=" + inputType + "&pageSize=" + pageSize + "&page=" + page + "&format=1";

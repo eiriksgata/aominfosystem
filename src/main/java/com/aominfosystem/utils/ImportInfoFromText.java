@@ -3,11 +3,7 @@ package com.aominfosystem.utils;
 import com.aominfosystem.model.CardGroupFile;
 
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +22,10 @@ public class ImportInfoFromText {
         List<CardGroupFile> resultList = new ArrayList<CardGroupFile>();
         int count = 0;
         try {
-            RandomAccessFile raf = new RandomAccessFile(filePath, OPEN_FILE_STYLE);
+            BufferedReader raf = new BufferedReader(new FileReader(filePath));
             while (null != (line_record = raf.readLine())) {
                 //这里看操作系统的编码集,一般Windows中文默认是GBK,Linux是UTF-8
-                line_record = new String(line_record.getBytes());
+                //line_record = new String(line_record.getBytes(),"gb2312");
                 CardGroupFile cardGroupFile = parseRecord(line_record);
                 resultList.add(cardGroupFile);
                 //System.out.println(cardGroupFile.getProbability() + " : " + cardGroupFile.getDescribe());
@@ -39,8 +35,10 @@ public class ImportInfoFromText {
             System.out.println("本次共导入数据 " + count + " 条");
         } catch (FileNotFoundException ef) {
             ef.printStackTrace();
+            System.out.println(ef);
         } catch (IOException ei) {
             ei.printStackTrace();
+            System.out.println(ei);
         }
         return resultList;
     }

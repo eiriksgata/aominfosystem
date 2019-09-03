@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.config.GlobalConfig;
+import com.aominfosystem.config.ReadLocalConfigFile;
 import com.aominfosystem.controller.GroupMessageRecord;
 import com.aominfosystem.controller.MessageController;
 import com.aominfosystem.utils.ConfigurationFile;
@@ -54,7 +55,7 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
        // 模拟群聊消息
         // 开始模拟群聊消息
         //demo.groupMsg(0, 10008, 123456, 77777, "", ">_musicFind xiami,soldout", 0);
-        demo.groupMsg(0, 10008, 123456, 77777, "", ">_musicPlay qq,1795789009", 0);
+        demo.groupMsg(0, 10008, 123456, 77777, "", ">_draw", 0);
 
 
         // ......
@@ -366,20 +367,11 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      */
     public int enable() {
         enable = true;
-        //检测是否有配置文件,并创建初始配置文件
-        createInifile();
 
         //读取配置文件
-        try {
-            String filePath = CreateSystemFile.folderName + "\\" + CreateSystemFile.configFileName;
-            GlobalConfig.usingLocalData = Boolean.valueOf(ConfigurationFile.readCfgValue(filePath,"AomInfoSystem","usingLocalData","true")) ;
-            GlobalConfig.userBlacklist = ConfigurationFile.readCfgValue(filePath,"LocalConfig","userBlacklist","").split(",");
-            GlobalConfig.groupBlacklist = ConfigurationFile.readCfgValue(filePath,"LocalConfig","groupBlacklist","").split(",");
-            GlobalConfig.recordSwitch = Boolean.valueOf(ConfigurationFile.readCfgValue(filePath,"MessageRecord","switch","false"));
-            GlobalConfig.recourdGroupList = ConfigurationFile.readCfgValue(filePath,"MessageRecord","recordGroupList","").split(",");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ReadLocalConfigFile start = new ReadLocalConfigFile();
+        start.readLocalStart();
+
         //启动SpringBoot
         //context = SpringApplication.run(AominfosystemApplication.class);
         return 0;

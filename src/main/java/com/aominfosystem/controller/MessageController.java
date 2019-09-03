@@ -19,8 +19,9 @@ public class MessageController implements IMsg {
 
     public String messageAfferent(int msgId, long fromGroup, long fromqq, String fromAnonymous, String msg) {
 
-
+        //启动本地配置
         if (GlobalConfig.usingLocalData){
+            
             Boolean inBlacklist = false;
             String QQtoString = String.valueOf(fromqq);
             String grouptoString = String.valueOf(fromGroup);

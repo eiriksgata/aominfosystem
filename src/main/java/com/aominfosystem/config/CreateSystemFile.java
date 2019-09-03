@@ -39,6 +39,8 @@ public class CreateSystemFile {
                         ";设置插件系统采用本地数据模式\r\n" +
                         "usingLocalData=true\r\n" +
                         "[LocalConfig]\r\n" +
+                        ";主人QQ(影响指令)\r\n" +
+                        "adminNumberList=" +
                         ";QQ用户黑名单\r\n" +
                         "userBlacklist=45456566,23235656\r\n" +
                         ";群黑名单\r\n" +
