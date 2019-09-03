@@ -5,7 +5,6 @@ import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.config.GlobalConfig;
 import com.aominfosystem.controller.cofig.InstructionsConfig;
 import com.aominfosystem.pulg.DrawUtils;
-import com.aominfosystem.pulg.MusicPulg;
 import com.aominfosystem.pulg.impl.MusicPulgImpl;
 import com.aominfosystem.pulg.impl.NotePulgImpl;
 import com.aominfosystem.utils.ConfigurationFile;
@@ -16,9 +15,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.sobte.cqp.jcq.event.JcqApp.CC;
-import static com.sobte.cqp.jcq.event.JcqApp.CQ;
 
-public class Instructions {
+class Instructions {
 
 
     private NotePulgImpl notePulg = new NotePulgImpl();
@@ -27,11 +25,7 @@ public class Instructions {
     private boolean drawCooling = true;
     static boolean recordOpen = false;
 
-
-    Instructions() {
-
-    }
-
+    Instructions() {}
     /**
      * 指令类型判断
      *

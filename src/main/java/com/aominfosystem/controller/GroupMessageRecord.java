@@ -18,28 +18,18 @@ import static com.aominfosystem.utils.FileUtils.fileLinesWrite;
 import static com.sobte.cqp.jcq.event.JcqApp.CQ;
 
 public class GroupMessageRecord {
-
-
-
-    public GroupMessageRecord() {
-    }
+    public GroupMessageRecord() {}
 
     public void messageRecord(int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg) {
 
 
         if (!usingLocalData) {
 
-            Boolean saveOrNot = true;
+            boolean saveOrNot = true;
 
             String nike;
             Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ,true);
-            if(member.getCard().equals("")){
-                nike = member.getNick();
-            }else if(member.getNick().equals("")){
-                nike = String.valueOf(member.getQqId());
-            }else {
-                nike = member.getCard();
-            }
+            nike = getNikeString(member);
 
             for (int j = 0; j < GroupMessageCofig.unMonitoringQQ.length; j++) {
                 if (fromQQ == GroupMessageCofig.unMonitoringQQ[j]) {
@@ -85,15 +75,7 @@ public class GroupMessageRecord {
             if (recordSwitch&&recordOpen){
                 String likeText;
                 Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ,true);
-                String name;
-                if(member.getCard().equals("")){
-                    name = member.getNick();
-                }else if(member.getNick().equals("")){
-                    name = String.valueOf(member.getQqId());
-                }else {
-                    name = member.getCard();
-                }
-
+                String name = getNikeString(member);
                 likeText = "[" + name + "]" + msg ;
                 fileLinesWrite(CreateSystemFile.folderName + "\\"+ "localMessageRecord" + "\\" + fromGroup +".txt",likeText,true);
             }
@@ -102,6 +84,18 @@ public class GroupMessageRecord {
 
 
 
+    }
+
+    private String getNikeString(Member member) {
+        String nike;
+        if(member.getCard().equals("")){
+            nike = member.getNick();
+        }else if(member.getNick().equals("")){
+            nike = String.valueOf(member.getQqId());
+        }else {
+            nike = member.getCard();
+        }
+        return nike;
     }
 
     public void sendGroupMessage(String sendMessage) {

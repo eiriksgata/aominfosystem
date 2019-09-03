@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MessageController implements IMsg {
 
-    Instructions instructions = new Instructions();
+    private Instructions instructions = new Instructions();
 
     public MessageController() {
     }
@@ -21,8 +21,8 @@ public class MessageController implements IMsg {
 
         //启动本地配置
         if (GlobalConfig.usingLocalData){
-            
-            Boolean inBlacklist = false;
+
+            boolean inBlacklist = false;
             String QQtoString = String.valueOf(fromqq);
             String grouptoString = String.valueOf(fromGroup);
             for (int i=0;i<GlobalConfig.groupBlacklist.length;i++){
@@ -45,7 +45,7 @@ public class MessageController implements IMsg {
             }
         }
         if (!GlobalConfig.usingLocalData){
-            Boolean inOnlinBlacklist = false;
+            boolean inOnlinBlacklist = false;
 
 
             SqlSession session = MyBatisUtil.getSession();
@@ -53,8 +53,8 @@ public class MessageController implements IMsg {
             List<Groupserviceslist> list = groupserviceslistMapper.findAll();
             session.close();
 
-            for (int i=0;i<list.size();i++){
-                if (list.get(i).getGroupnumber() == fromqq || list.get(i).getGroupnumber() == fromGroup){
+            for (Groupserviceslist aList : list) {
+                if (aList.getGroupnumber() == fromqq || aList.getGroupnumber() == fromGroup) {
                     inOnlinBlacklist = true;
                     break;
                 }
