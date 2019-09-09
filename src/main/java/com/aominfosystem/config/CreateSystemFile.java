@@ -40,7 +40,7 @@ public class CreateSystemFile {
                         "usingLocalData=true\r\n" +
                         "[LocalConfig]\r\n" +
                         ";主人QQ(影响指令)\r\n" +
-                        "adminNumberList=" +
+                        "adminNumberList=\r\n" +
                         ";QQ用户黑名单\r\n" +
                         "userBlacklist=45456566,23235656\r\n" +
                         ";群黑名单\r\n" +
@@ -53,10 +53,10 @@ public class CreateSystemFile {
                         "[MessageRecord]\r\n" +
                         ";管理员QQ，不输入那么谁都可以开启消息记录指令，建议输入主人QQ，支持输入多个\r\n" +
                         "recordAdmin=\r\n" +
-                        ";消息记录开关,false为消息记录功能关闭，true为激活，激活状态下，输入record指令才会开始记录" +
+                        ";消息记录开关,false为消息记录功能关闭，true为激活，激活状态下，输入record指令才会开始记录\r\n" +
                         "switch=false\r\n" +
-                        ";消息记录的群列表" +
-                        "recordGroupList=123456,123456789";
+                        ";消息记录的群列表\r\n" +
+                        "recordGroupList=123456,123456789\r\n";
 
                 ImportInfoFromText.writeToTxt(folderName + "\\" + "CardGroupDate.txt");
 

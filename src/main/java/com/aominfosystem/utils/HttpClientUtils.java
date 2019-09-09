@@ -16,12 +16,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-/**
- * Description: httpClient工具类
- *
- * @author JourWon
- * @date Created on 2018年4月19日
- */
 public class HttpClientUtils {
 
     // 编码格式。发送编码格式统一用UTF-8

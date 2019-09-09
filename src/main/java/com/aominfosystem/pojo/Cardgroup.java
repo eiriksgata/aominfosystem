@@ -4,12 +4,9 @@ package com.aominfosystem.pojo;
 public class Cardgroup {
 
   private long id;
-  private String cardname;
-  private String type;
-  private double probability;
-  private long grade;
-  private String describe;
-  private String annotation;
+  private String groupName;
+  private String cardName;
+  private String cardDescribe;
 
 
   public long getId() {
@@ -21,57 +18,30 @@ public class Cardgroup {
   }
 
 
-  public String getCardname() {
-    return cardname;
+  public String getGroupName() {
+    return groupName;
   }
 
-  public void setCardname(String cardname) {
-    this.cardname = cardname;
-  }
-
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
+  public void setGroupName(String groupName) {
+    this.groupName = groupName;
   }
 
 
-  public double getProbability() {
-    return probability;
+  public String getCardName() {
+    return cardName;
   }
 
-  public void setProbability(double probability) {
-    this.probability = probability;
-  }
-
-
-  public long getGrade() {
-    return grade;
-  }
-
-  public void setGrade(long grade) {
-    this.grade = grade;
+  public void setCardName(String cardName) {
+    this.cardName = cardName;
   }
 
 
-  public String getDescribe() {
-    return describe;
+  public String getCardDescribe() {
+    return cardDescribe;
   }
 
-  public void setDescribe(String describe) {
-    this.describe = describe;
-  }
-
-
-  public String getAnnotation() {
-    return annotation;
-  }
-
-  public void setAnnotation(String annotation) {
-    this.annotation = annotation;
+  public void setCardDescribe(String cardDescribe) {
+    this.cardDescribe = cardDescribe;
   }
 
 }

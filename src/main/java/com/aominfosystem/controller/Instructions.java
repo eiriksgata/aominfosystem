@@ -5,6 +5,7 @@ import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.config.GlobalConfig;
 import com.aominfosystem.controller.cofig.InstructionsConfig;
 import com.aominfosystem.pulg.DrawUtils;
+import com.aominfosystem.pulg.impl.DrawCardImpl;
 import com.aominfosystem.pulg.impl.MusicPulgImpl;
 import com.aominfosystem.pulg.impl.NotePulgImpl;
 import com.aominfosystem.utils.ConfigurationFile;
@@ -21,6 +22,7 @@ class Instructions {
 
     private NotePulgImpl notePulg = new NotePulgImpl();
     private MusicPulgImpl musicPulg = new MusicPulgImpl();
+    private DrawCardImpl drawCard = new DrawCardImpl();
     private DrawUtils drawUtils = new DrawUtils();
     private boolean drawCooling = true;
     static boolean recordOpen = false;
@@ -78,13 +80,23 @@ class Instructions {
                 case "get":
                     return httpGetFunction(parameter,fromqq);
                 case "repetition":
-                    return repetitionMesaage(parameter);
+                    return repetitionMessage(parameter);
                 case "musicPlay":
                     return musicPulg.musicPlay(parameter,fromqq);
                 case "musicFind":
                     return musicPulg.musicFind(parameter,fromqq);
                 case "musicHelp":
                     return musicPulg.returnMusicHelpMessage();
+                case "addCard":
+                    return drawCard.addCard(parameter,fromqq);
+                case "findMyCard":
+                    return drawCard.findMyCardBag(parameter,fromqq);
+                case "useCard":
+                    return drawCard.useCard(parameter,fromqq);
+                case "drawCard":
+                    return drawCard.drawCardStart(parameter,fromqq);
+                case "seeCard":
+                    return drawCard.seeCard(parameter,fromqq);
                 default:
                     return "不太清楚您输的什么指令呢";
             }
@@ -95,13 +107,14 @@ class Instructions {
 
 
 
-    private String repetitionMesaage(String parmeter){
+    private String repetitionMessage(String parmeter){
         return parmeter;
     }
 
     private String httpGetFunction(String parameter,long fromqq){
         String result = "";
         if (GlobalConfig.adminNumberList!=null&&GlobalConfig.adminNumberList.length>0 && GlobalConfig.adminNumberList.length<2){
+
             try {
                 result = HttpClientUtils.doGet(parameter).getContent();
             } catch (Exception e) {
@@ -133,7 +146,8 @@ class Instructions {
     }
     private String recordManegr(long qq) {
 
-        if (GlobalConfig.adminNumberList == null){
+        //System.out.println(GlobalConfig.adminNumberList[0]);
+        if (GlobalConfig.adminNumberList[0].equals("")){
             recordOpen = !recordOpen;
         }else {
             for (int i=0;i<GlobalConfig.adminNumberList.length;i++){
@@ -169,7 +183,7 @@ class Instructions {
                     public void run() {
                         try {
                             ConfigurationFile.writeCfgValue("aominfosystemConf" + "\\" + "aominfosystemConfig.ini", "Draw", "cool", "false");
-                            System.out.println("set false");
+                            System.out.println("cool set false");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

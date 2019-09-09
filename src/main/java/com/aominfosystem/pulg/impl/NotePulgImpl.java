@@ -152,7 +152,7 @@ public class NotePulgImpl implements NotePulg {
         String result = "";
         if (new TypeTesting().isInt(parameter)) {
             try {
-                Integer deleteId = Integer.valueOf(parameter);
+                int deleteId = Integer.parseInt(parameter);
                 SqlSession sqlSession = MyBatisUtil.getSession();
                 NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
                 UserMapper userMapper = sqlSession.getMapper(UserMapper.class);

@@ -1,6 +1,6 @@
 package com.aominfosystem.utils;
 
-import com.aominfosystem.model.CardGroupFile;
+import com.aominfosystem.model.DrawDataFile;
 
 
 import java.io.*;
@@ -17,18 +17,18 @@ public class ImportInfoFromText {
      *
      * @param filePath
      */
-    public static List<CardGroupFile> readFromText(String filePath) {
+    public static List<DrawDataFile> readFromText(String filePath) {
         String line_record = null;
-        List<CardGroupFile> resultList = new ArrayList<CardGroupFile>();
+        List<DrawDataFile> resultList = new ArrayList<DrawDataFile>();
         int count = 0;
         try {
             BufferedReader raf = new BufferedReader(new FileReader(filePath));
             while (null != (line_record = raf.readLine())) {
                 //这里看操作系统的编码集,一般Windows中文默认是GBK,Linux是UTF-8
                 //line_record = new String(line_record.getBytes(),"gb2312");
-                CardGroupFile cardGroupFile = parseRecord(line_record);
-                resultList.add(cardGroupFile);
-                //System.out.println(cardGroupFile.getProbability() + " : " + cardGroupFile.getDescribe());
+                DrawDataFile drawDataFile = parseRecord(line_record);
+                resultList.add(drawDataFile);
+                //System.out.println(drawDataFile.getProbability() + " : " + drawDataFile.getDescribe());
                 count += 1;
             }
             raf.close();
@@ -47,35 +47,35 @@ public class ImportInfoFromText {
      * @param line_record
      * @return
      */
-    public static CardGroupFile parseRecord(String line_record) {
-        CardGroupFile cardGroupFile = new CardGroupFile();
+    public static DrawDataFile parseRecord(String line_record) {
+        DrawDataFile drawDataFile = new DrawDataFile();
 
         String[] fields = line_record.split(FIELLD_LIMIT_CHAR);//拆分块记录
-        cardGroupFile.setProbability(Double.parseDouble(fields[0]));
-        cardGroupFile.setDescribe(fields[1]);
+        drawDataFile.setProbability(Double.parseDouble(fields[0]));
+        drawDataFile.setDescribe(fields[1]);
 
-        return cardGroupFile;
+        return drawDataFile;
     }
 
     public static void writeToTxt( String fileName) throws IOException {
-        CardGroupFile cardGroupFile = new CardGroupFile();
-        //CardGroupFile.setFile_status("01");//对于文件状态,01表示未导出,02表示导出中,03表示已导出成功.
-        List<CardGroupFile> cardGroupFileList = new ArrayList<CardGroupFile>();//通过查询得到
+        DrawDataFile drawDataFile = new DrawDataFile();
+        //DrawDataFile.setFile_status("01");//对于文件状态,01表示未导出,02表示导出中,03表示已导出成功.
+        List<DrawDataFile> drawDataFileList = new ArrayList<DrawDataFile>();//通过查询得到
 
-        cardGroupFile.setProbability(0.5);
-        cardGroupFile.setDescribe("this test describe");
+        drawDataFile.setProbability(0.5);
+        drawDataFile.setDescribe("this test describe");
 
-        cardGroupFileList.add(cardGroupFile);
-        cardGroupFileList.add(cardGroupFile);
-        cardGroupFileList.add(cardGroupFile);
+        drawDataFileList.add(drawDataFile);
+        drawDataFileList.add(drawDataFile);
+        drawDataFileList.add(drawDataFile);
         int count = 0;
         OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fileName));
         try {
-            if (cardGroupFileList.size() > 0) {
-                for (int i=0;i<cardGroupFileList.size();i++) {
-                    out.write(String.valueOf(cardGroupFileList.get(i).getProbability()) + "|");
-                    out.write(cardGroupFileList.get(i).getDescribe()+"\r\n");
-                    //System.out.println(cardGroupFileList.toString());
+            if (drawDataFileList.size() > 0) {
+                for (int i = 0; i< drawDataFileList.size(); i++) {
+                    out.write(String.valueOf(drawDataFileList.get(i).getProbability()) + "|");
+                    out.write(drawDataFileList.get(i).getDescribe()+"\r\n");
+                    //System.out.println(drawDataFileList.toString());
                     count++;
                 }
                 System.out.println("本次共成功导出文到文件 " + count + " 条");

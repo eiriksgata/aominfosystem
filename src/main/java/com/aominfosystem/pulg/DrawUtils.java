@@ -2,7 +2,7 @@ package com.aominfosystem.pulg;
 
 
 import com.aominfosystem.config.CreateSystemFile;
-import com.aominfosystem.model.CardGroupFile;
+import com.aominfosystem.model.DrawDataFile;
 import com.aominfosystem.utils.ImportInfoFromText;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DrawUtils {
 
-    private static List<CardGroupFile> cardList = new ArrayList<CardGroupFile>();
+    private static List<DrawDataFile> cardList = new ArrayList<DrawDataFile>();
 
 
     public DrawUtils() {
@@ -20,7 +20,7 @@ public class DrawUtils {
         for (int i = 0; i < cardList.size(); i++) {
             for (int j = 0; j < cardList.size(); j++) {
                 if (cardList.get(i).getProbability() < cardList.get(i).getProbability()) {
-                    CardGroupFile t = new CardGroupFile();
+                    DrawDataFile t = new DrawDataFile();
                     t.setDescribe(cardList.get(i).getDescribe());
                     t.setProbability(cardList.get(i).getProbability());
 
@@ -35,7 +35,7 @@ public class DrawUtils {
         String result = "";
 
         double random = Math.random();
-        List<CardGroupFile> accordList = new ArrayList<CardGroupFile>();
+        List<DrawDataFile> accordList = new ArrayList<DrawDataFile>();
         for (int i = 0; i < cardList.size(); i++) {
             if (random < cardList.get(i).getProbability()) {
                 accordList.add(cardList.get(i));
@@ -50,7 +50,7 @@ public class DrawUtils {
         }
         if (accordList.size() > 1) {
             double value = accordList.get(0).getProbability();
-            List<CardGroupFile> secondary = new ArrayList<CardGroupFile>();
+            List<DrawDataFile> secondary = new ArrayList<DrawDataFile>();
             for (int i = 0; i < accordList.size(); i++) {
                 if (accordList.get(i).getProbability() == value) {
                     secondary.add(accordList.get(i));

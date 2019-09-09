@@ -1,6 +1,6 @@
 package com.aominfosystem.model;
 
-public class CardGroupFile {
+public class DrawDataFile {
 
     private double probability;//概率
     private String describe;//描述

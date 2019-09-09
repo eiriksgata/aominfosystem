@@ -42,5 +42,6 @@
         <mapper class="com.aominfosystem.mapper.UserMapper" />
         <mapper class="com.aominfosystem.mapper.CardgroupMapper" />
         <mapper class="com.aominfosystem.mapper.GroupserviceslistMapper" />
+        <mapper class="com.aominfosystem.mapper.UsercardbagMapper" />
     </mappers>
 </configuration>
