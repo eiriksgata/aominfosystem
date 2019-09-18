@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Mapper
-@Repository
 public interface UserMapper{
     @Select("select * from user where fromqq=#{fromqq}")
     User findByFromqq(long fromqq);

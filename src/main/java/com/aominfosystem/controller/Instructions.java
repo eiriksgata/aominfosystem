@@ -27,7 +27,9 @@ class Instructions {
     private boolean drawCooling = true;
     static boolean recordOpen = false;
 
-    Instructions() {}
+    Instructions() {
+    }
+
     /**
      * 指令类型判断
      *
@@ -39,17 +41,30 @@ class Instructions {
         if (orderMessageConfirm(msg)) {
             //正则表达式
             String regex = ".*? ";
-            Boolean flag = false;
+
             String type;
             String matchersStr;
+
+            int instructionsPrefixLength = 2;
+            if (GlobalConfig.instructionsPrefix == null || GlobalConfig.instructionsPrefix.equals("0")) {
+
+            } else {
+                if (GlobalConfig.instructionsPrefix.equals("1")) {
+                    instructionsPrefixLength = 1;
+                }else {
+                    instructionsPrefixLength = GlobalConfig.instructionsPrefix.length();
+                }
+            }
+
+
             if (RegularExpressionUtils.getMatchers(regex, msg).size() == 0) {
                 matchersStr = msg;
-                type = matchersStr.substring(2);
+                type = matchersStr.substring(instructionsPrefixLength);
 
             } else {
                 matchersStr = RegularExpressionUtils.getMatchers(regex, msg).get(0);
-                type = matchersStr.substring(2, matchersStr.length() - 1);
-                //System.out.println(matchersStr);
+                type = matchersStr.substring(instructionsPrefixLength, matchersStr.length() - 1);
+
             }
 
 
@@ -78,25 +93,25 @@ class Instructions {
                 case "recordHelp":
                     return returnRecordHelpInfo();
                 case "get":
-                    return httpGetFunction(parameter,fromqq);
+                    return httpGetFunction(parameter, fromqq);
                 case "repetition":
                     return repetitionMessage(parameter);
                 case "musicPlay":
-                    return musicPulg.musicPlay(parameter,fromqq);
+                    return musicPulg.musicPlay(parameter, fromqq);
                 case "musicFind":
-                    return musicPulg.musicFind(parameter,fromqq);
+                    return musicPulg.musicFind(parameter, fromqq);
                 case "musicHelp":
                     return musicPulg.returnMusicHelpMessage();
                 case "addCard":
-                    return drawCard.addCard(parameter,fromqq);
+                    return drawCard.addCard(parameter, fromqq);
                 case "findMyCard":
-                    return drawCard.findMyCardBag(parameter,fromqq);
+                    return drawCard.findMyCardBag(parameter, fromqq);
                 case "useCard":
-                    return drawCard.useCard(parameter,fromqq);
+                    return drawCard.useCard(parameter, fromqq);
                 case "drawCard":
-                    return drawCard.drawCardStart(parameter,fromqq);
+                    return drawCard.drawCardStart(parameter, fromqq);
                 case "seeCard":
-                    return drawCard.seeCard(parameter,fromqq);
+                    return drawCard.seeCard(parameter, fromqq);
                 default:
                     return "不太清楚您输的什么指令呢";
             }
@@ -106,24 +121,23 @@ class Instructions {
     }
 
 
-
-    private String repetitionMessage(String parmeter){
+    private String repetitionMessage(String parmeter) {
         return parmeter;
     }
 
-    private String httpGetFunction(String parameter,long fromqq){
+    private String httpGetFunction(String parameter, long fromqq) {
         String result = "";
-        if (GlobalConfig.adminNumberList!=null&&GlobalConfig.adminNumberList.length>0 && GlobalConfig.adminNumberList.length<2){
+        if (GlobalConfig.adminNumberList != null && GlobalConfig.adminNumberList.length > 0 && GlobalConfig.adminNumberList.length < 2) {
 
             try {
                 result = HttpClientUtils.doGet(parameter).getContent();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             assert GlobalConfig.adminNumberList != null;
-            for (int i = 0; i<GlobalConfig.adminNumberList.length; i++){
-                if (GlobalConfig.adminNumberList[i].equals(String.valueOf(fromqq))){
+            for (int i = 0; i < GlobalConfig.adminNumberList.length; i++) {
+                if (GlobalConfig.adminNumberList[i].equals(String.valueOf(fromqq))) {
                     try {
                         result = HttpClientUtils.doGet(parameter).getContent();
                     } catch (Exception e) {
@@ -137,21 +151,22 @@ class Instructions {
     }
 
 
-    private String returnRecordHelpInfo(){
+    private String returnRecordHelpInfo() {
 
         return "输入>_record后系统将会在后台激活消息记录状态，将会记录接收到的群消息。如果localMessageRecord目录没有那么系统将会创建。" +
                 "开启消息记录后，所说的每一句话都会被追加记录在localMessageRecord文件夹中，如果需要单独取出消息内容，或者定期备份，请将该文件重命名即可。" +
                 "如果需要关闭请再次输入>_record即可停止消息记录。" +
                 "记录按照群号来进行划分。";
     }
+
     private String recordManegr(long qq) {
 
         //System.out.println(GlobalConfig.adminNumberList[0]);
-        if (GlobalConfig.adminNumberList[0].equals("")){
+        if (GlobalConfig.adminNumberList[0].equals("")) {
             recordOpen = !recordOpen;
-        }else {
-            for (int i=0;i<GlobalConfig.adminNumberList.length;i++){
-                if (GlobalConfig.adminNumberList[i].equals(String.valueOf(qq))){
+        } else {
+            for (int i = 0; i < GlobalConfig.adminNumberList.length; i++) {
+                if (GlobalConfig.adminNumberList[i].equals(String.valueOf(qq))) {
                     recordOpen = !recordOpen;
                     break;
                 }
@@ -238,7 +253,7 @@ class Instructions {
                 "\n>_musicHelp:详细的介绍了点歌功能的使用" +
                 "\n+>_post X:post请求" +
                 "\n(带有*的功能需要开启联网才能使用,带有+尚未开放的功能,带有-为主人命令)" +
-                "\n当前版本号为 1.0.4 使用>_link查看更新内容";
+                "\n当前版本号为 1.0.5 使用>_link查看更新内容";
         return result;
     }
 
@@ -255,7 +270,7 @@ class Instructions {
                 "2.作者博客网址:https://eiriksgata.home.blog\n" +
                 "4.web工具（目前有凯撒密码自动分析工具、任意进制转换）:https://keith404.gitee.io/tool/\n" +
                 "5.测试数据生成工具（生成身份证等信息，支持接口信息返回）:http://134.175.148.53:8091/datageneration-Base/\n" +
-                "当前版本:1.0.3.RELEASE:";
+                "当前版本:1.0.5.RELEASE:";
 
         return result;
     }

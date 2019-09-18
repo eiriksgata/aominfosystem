@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
 
 public class TypeTesting {
 
-    public TypeTesting(){}
+    public TypeTesting() {
+    }
 
     public boolean isInt(String string) {
         if (string == null)

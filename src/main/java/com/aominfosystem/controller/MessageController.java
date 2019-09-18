@@ -41,8 +41,12 @@ public class MessageController implements IMsg {
 
             if (msg != null && !inBlacklist) {
                 //System.out.println(instructions.directiveJudgment(fromGroup, msg, fromqq));
+
+
                 return instructions.directiveJudgment(fromGroup, msg, fromqq);
             }
+
+
         }
         if (!GlobalConfig.usingLocalData){
             boolean inOnlinBlacklist = false;

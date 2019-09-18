@@ -137,7 +137,7 @@ public class DrawCardImpl implements DrawCard {
     public String addCard(String parameter, long fromqq) {
         String result = null;
         // 0 为 添加的卡池名称 1为卡名 2卡的描述
-        String inputValue[] = parameter.split(",");
+        String[] inputValue = parameter.split(",");
 
         if (GlobalConfig.adminNumberList == null || GlobalConfig.adminNumberList.length == 0 || GlobalConfig.adminNumberList[0].equals("")) {
             result = addFunction(inputValue);

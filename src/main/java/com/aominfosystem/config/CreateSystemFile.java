@@ -45,6 +45,8 @@ public class CreateSystemFile {
                         "userBlacklist=45456566,23235656\r\n" +
                         ";群黑名单\r\n" +
                         "groupBlacklist=1212321,123123\r\n" +
+                        ";采用前缀方式0为采用>_的形式1为.方式其他字符为使用该前缀\r\n" +
+                        "instructionsPrefix=0" +
                         "[Draw]\r\n" +
                         ";冷却时间" +
                         "drawCooling=5000\r\n" +
@@ -56,7 +58,10 @@ public class CreateSystemFile {
                         ";消息记录开关,false为消息记录功能关闭，true为激活，激活状态下，输入record指令才会开始记录\r\n" +
                         "switch=false\r\n" +
                         ";消息记录的群列表\r\n" +
-                        "recordGroupList=123456,123456789\r\n";
+                        "recordGroupList=123456,123456789\r\n" +
+                        ";COC文本设置\r\n" +
+                        "[COCText]" +
+                        "";
 
                 ImportInfoFromText.writeToTxt(folderName + "\\" + "CardGroupDate.txt");
 

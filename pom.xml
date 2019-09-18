@@ -258,10 +258,7 @@
         </resources>
 
         <!-- 将依赖包输出到 target\lib 中, 将lib目录复制到插件 同名文件夹下 即可导入依赖 -->
-
-
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>

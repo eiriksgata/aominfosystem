@@ -11,5 +11,5 @@ public class GlobalConfig {
     public static Boolean recordSwitch;
     public static String[] recourdGroupList;
     public static String[] recordAdmin;
-
+    public static String instructionsPrefix;
 }

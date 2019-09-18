@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Mapper
-@Repository
 public interface UsercardbagMapper {
 
     @Select("select * from usercardbag where cardGroupName = #{cardGroupName}")

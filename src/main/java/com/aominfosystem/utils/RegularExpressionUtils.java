@@ -24,4 +24,12 @@ public class RegularExpressionUtils {
         }
         return list;
     }
+
+
+    public static String getMatcherString(String regex, String source) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(source);
+        matcher.find();
+        return matcher.group();
+    }
 }

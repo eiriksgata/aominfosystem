@@ -22,13 +22,17 @@ public class ReadLocalConfigFile {
         //读取配置文件
         try {
             GlobalConfig.usingLocalData = Boolean.valueOf(ConfigurationFile.readCfgValue(filePath,"AomInfoSystem","usingLocalData","true")) ;
-            GlobalConfig.userBlacklist = ConfigurationFile.readCfgValue(filePath,"LocalConfig","userBlacklist","").split(",");
-            GlobalConfig.groupBlacklist = ConfigurationFile.readCfgValue(filePath,"LocalConfig","groupBlacklist","").split(",");
+            GlobalConfig.userBlacklist = ConfigurationFile.readCfgValue(filePath,"LocalConfig","userBlacklist",null).split(",");
+            GlobalConfig.groupBlacklist = ConfigurationFile.readCfgValue(filePath,"LocalConfig","groupBlacklist",null).split(",");
             GlobalConfig.recordSwitch = Boolean.valueOf(ConfigurationFile.readCfgValue(filePath,"MessageRecord","switch","false"));
             GlobalConfig.recourdGroupList = ConfigurationFile.readCfgValue(filePath,"MessageRecord","recordGroupList","").split(",");
             //获取主人QQ
             GlobalConfig.adminNumberList = ConfigurationFile.readCfgValue(filePath,"LocalConfig","adminNumberList","").split(",");
+            //获取指令类型
+            GlobalConfig.instructionsPrefix = ConfigurationFile.readCfgValue(filePath,"LocalConfig","instructionsPrefix","1");
 
+
+            //coc文本载入
 
         } catch (IOException e) {
             e.printStackTrace();

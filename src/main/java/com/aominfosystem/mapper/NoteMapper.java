@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Mapper
-@Repository
 public interface NoteMapper {
     @Insert("insert into note (id,creator,grade,title,hide,text) " +
             "values (#{id},#{creator},#{grade},#{title},#{hide},#{text})")

@@ -55,7 +55,7 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
        // 模拟群聊消息
         // 开始模拟群聊消息
         //demo.groupMsg(0, 10008, 123456, 77777, "", ">_musicFind xiami,soldout", 0);
-        demo.groupMsg(0, 10008, 123456, 23456, "", "", 0);
+        demo.groupMsg(0, 10008, 123456, 23456, "", ">_addCard 塔罗牌,星星,正位释义", 0);
 
 
         // ......
