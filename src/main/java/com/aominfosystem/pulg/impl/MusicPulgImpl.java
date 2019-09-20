@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.sobte.cqp.jcq.event.JcqApp.CC;
-import static com.sobte.cqp.jcq.event.JcqApp.CQ;
 
 /**
  * @author: create by Keith
@@ -59,7 +57,7 @@ public class MusicPulgImpl implements MusicPulg {
                         return result;
                     } catch (Exception e) {
                         System.out.println(e.toString());
-                        CQ.logInfoRecv("用户错误的输入", "musicPlay Function input format error");
+                        //CQ.logInfoRecv("用户错误的输入", "musicPlay Function input format error");
                     }
                 }else {
                     result = "暂时不支持QQ播放，播放接口已经改变";

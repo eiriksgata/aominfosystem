@@ -5,6 +5,8 @@ import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.config.GlobalConfig;
 import com.aominfosystem.controller.cofig.InstructionsConfig;
 import com.aominfosystem.pulg.DrawUtils;
+import com.aominfosystem.pulg.TRPGRoll.AttributeManagerImpl;
+import com.aominfosystem.pulg.TRPGRoll.RollTheDiceImpl;
 import com.aominfosystem.pulg.impl.DrawCardImpl;
 import com.aominfosystem.pulg.impl.MusicPulgImpl;
 import com.aominfosystem.pulg.impl.NotePulgImpl;
@@ -24,6 +26,9 @@ class Instructions {
     private MusicPulgImpl musicPulg = new MusicPulgImpl();
     private DrawCardImpl drawCard = new DrawCardImpl();
     private DrawUtils drawUtils = new DrawUtils();
+    private AttributeManagerImpl attributeManager = new AttributeManagerImpl();
+    private RollTheDiceImpl rollTheDice = new RollTheDiceImpl();
+
     private boolean drawCooling = true;
     static boolean recordOpen = false;
 
@@ -43,7 +48,7 @@ class Instructions {
             String regex = ".*? ";
 
             String type;
-            String matchersStr;
+            String parameter;
 
             int instructionsPrefixLength = 2;
             if (GlobalConfig.instructionsPrefix == null || GlobalConfig.instructionsPrefix.equals("0")) {
@@ -51,25 +56,23 @@ class Instructions {
             } else {
                 if (GlobalConfig.instructionsPrefix.equals("1")) {
                     instructionsPrefixLength = 1;
-                }else {
+
+                } else {
                     instructionsPrefixLength = GlobalConfig.instructionsPrefix.length();
                 }
             }
 
-
-            if (RegularExpressionUtils.getMatchers(regex, msg).size() == 0) {
-                matchersStr = msg;
-                type = matchersStr.substring(instructionsPrefixLength);
-
+            type = RegularExpressionUtils.getMatcherString(regex, msg);
+            if (type == null) {
+                type = msg.substring(instructionsPrefixLength);
+                parameter = "";
             } else {
-                matchersStr = RegularExpressionUtils.getMatchers(regex, msg).get(0);
-                type = matchersStr.substring(instructionsPrefixLength, matchersStr.length() - 1);
+                parameter = msg.substring(type.length());
+                type = type.substring(instructionsPrefixLength,type.length()-1);
 
             }
 
 
-            //取剩下的参数值
-            String parameter = msg.substring(matchersStr.length());
             //指令关键字判断
             switch (type) {
                 case "help":
@@ -112,8 +115,27 @@ class Instructions {
                     return drawCard.drawCardStart(parameter, fromqq);
                 case "seeCard":
                     return drawCard.seeCard(parameter, fromqq);
+                case "st":
+                    return attributeManager.playerAttributeEntry(parameter, fromqq, fromGroup);
+                case "sta":
+                    return attributeManager.playerAttributeSet(parameter, fromqq, fromGroup);
+                case "deleteAttribute":
+                    return attributeManager.playerAttributeDelete(fromqq, fromGroup);
+                case "findAllAttribute":
+                    return attributeManager.playerAttributeFindAll(fromqq, fromGroup);
+                case "findValueAttribute":
+                    return attributeManager.playerAttributeFindByValue(parameter, fromqq, fromGroup);
+                case "sc":
+                    return rollTheDice.rollSCCheck(parameter, fromqq, fromGroup);
+                case "sh":
+                    return rollTheDice.rollSHCheck(parameter, fromqq, fromGroup);
+                case "r":
+                    return rollTheDice.rollRandom(parameter, fromqq, fromGroup);
+                case "ra":
+                    return rollTheDice.rollAttribute(parameter, fromqq, fromGroup);
+
                 default:
-                    return "不太清楚您输的什么指令呢";
+                    return null;
             }
         } else {
             return null;
@@ -226,13 +248,19 @@ class Instructions {
      * @return
      */
     private Boolean orderMessageConfirm(String msg) {
+        System.out.println(1);
+        if (msg.length() > 2) {
+            if (GlobalConfig.instructionsPrefix.equals("1")) {
+                return msg.substring(0, 1).equals(InstructionsConfig.prefix1);
+            }
 
-        if (msg.length() > 4) {
-            return msg.substring(0, 2).equals(InstructionsConfig.prefix);
-        } else {
-            return false;
+            if (GlobalConfig.instructionsPrefix.equals("0")) {
+                return msg.substring(0, 2).equals(InstructionsConfig.prefix);
+            }
+
+
         }
-
+        return false;
     }
 
     /**

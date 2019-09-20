@@ -46,9 +46,9 @@ public class CreateSystemFile {
                         ";群黑名单\r\n" +
                         "groupBlacklist=1212321,123123\r\n" +
                         ";采用前缀方式0为采用>_的形式1为.方式其他字符为使用该前缀\r\n" +
-                        "instructionsPrefix=0" +
+                        "instructionsPrefix=0\r\n" +
                         "[Draw]\r\n" +
-                        ";冷却时间" +
+                        ";冷却时间\r\n" +
                         "drawCooling=5000\r\n" +
                         ";抽奖冷却状态true为进入冷却状态\r\n" +
                         "cool=false\r\n" +

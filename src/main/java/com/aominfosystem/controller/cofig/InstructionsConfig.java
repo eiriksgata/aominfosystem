@@ -9,6 +9,7 @@ package com.aominfosystem.controller.cofig;
 public class InstructionsConfig {
 
     public static String prefix = ">_";
+    public static String prefix1 = ".";
     public static String[] instrucitons ={
             "help",
             "link",

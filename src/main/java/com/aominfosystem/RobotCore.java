@@ -1,15 +1,12 @@
 package com.aominfosystem;
 
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.config.GlobalConfig;
 import com.aominfosystem.config.ReadLocalConfigFile;
 import com.aominfosystem.controller.GroupMessageRecord;
 import com.aominfosystem.controller.MessageController;
 import com.aominfosystem.utils.ConfigurationFile;
-import com.aominfosystem.utils.HttpClientUtils;
 import com.aominfosystem.utils.OpenBrowserUtils;
 import com.aominfosystem.utils.RegularExpressionUtils;
 import com.sobte.cqp.jcq.entity.*;
@@ -55,7 +52,7 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
        // 模拟群聊消息
         // 开始模拟群聊消息
         //demo.groupMsg(0, 10008, 123456, 77777, "", ">_musicFind xiami,soldout", 0);
-        demo.groupMsg(0, 10008, 123456, 23456, "", ">_addCard 塔罗牌,星星,正位释义", 0);
+        demo.groupMsg(0, 10008, 123456, 23456, "", ".musicFind 163,soldout", 0);
 
 
         // ......
@@ -151,27 +148,6 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             // 将匿名用户信息放到 anonymous 变量中
             Anonymous anonymous = CQ.getAnonymous(fromAnonymous);
         }
-
-        // 解析CQ码案例 如：[CQ:at,qq=100000]
-        // 解析CQ码 常用变量为 CC(CQCode) 此变量专为CQ码这种特定格式做了解析和封装
-        // CC.analysis();// 此方法将CQ码解析为可直接读取的对象
-        // 解析消息中的QQID
-        //long qqId = CC.getAt(msg);// 此方法为简便方法，获取第一个CQ:at里的QQ号，错误时为：-1000
-        //List<Long> qqIds = CC.getAts(msg); // 此方法为获取消息中所有的CQ码对象，错误时返回 已解析的数据
-        // 解析消息中的图片
-        //CQImage image = CC.getCQImage(msg);// 此方法为简便方法，获取第一个CQ:image里的图片数据，错误时打印异常到控制台，返回 null
-        //List<CQImage> images = CC.getCQImages(msg);// 此方法为获取消息中所有的CQ图片数据，错误时打印异常到控制台，返回 已解析的数据
-
-        // 这里处理消息
-       // CQ.sendGroupMsg(123456789,"[CQ:rich,title=&#91;分享&#93;Sold Out,content={\"music\":{\"sourceMsgId\":\"0\"&#44;\"title\":\"Sold Out\"&#44;\"desc\":\"Hawk Nelson\"&#44;\"Preview\":\"http://url.cn/5JnknLi\"&#44;\"tag\":\"网易云音乐\"&#44;\"musicUrl\":\"http://url.cn/59dzT4W\"&#44;\"jumpUrl\":\"http://music.163.com/song/31010566/?userid=106261920\"&#44;\"appid\":100495085&#44;\"app_type\":1&#44;\"action\":\"\"&#44;\"source_url\":\"\"&#44;\"source_icon\":\"\"&#44;\"android_pkg_name\":\"\"}}]");
-        //CQ.sendGroupMsg(536125363,"[CQ:rich,title=;分享;Sold Out,content={music:{sourceMsgId:0;title:Sold Out;desc:Hawk Nelson;Preview:http://url.cn/5JnknLi;tag:网易云音乐;musicUrl:http://url.cn/59dzT4W;jumpUrl:http://music.163.com/song/31010566/?userid=106261920;appid:100495085;app_type:1;action:;source_url:;source_icon:;android_pkg_name:}}]");
-        //String cqmusic = CC.music("http://url.cn/5JnknLi","","SoldOut","{music:{sourceMsgId:0;title:Sold Out;desc:Hawk Nelson;Preview:http://url.cn/5JnknLi;tag:网易云音乐;musicUrl:http://url.cn/59dzT4W;jumpUrl:http://music.163.com/song/31010566/?userid=106261920&#44;appid:100495085&#44;app_type:1&#44;action:&#44;source_url:;source_icon:android_pkg_name:}}]","");
-        //String cqmusic =CC.music()
-        //CQ.sendGroupMsg(536125363,cqmusic);
-        //CQ.sendGroupMsg(536125363,CC.at(2353686862L));
-        //CQ.sendGroupMsg(536125363,CC.music(31010566,"163",false));
-
-        //System.out.println(CC.music(123456,"qq",false));
 
 
         //对群消息进行逻辑处理

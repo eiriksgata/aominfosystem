@@ -14,16 +14,20 @@ import org.apache.ibatis.annotations.*;
 public interface CocAttributeMapper {
 
     @Insert("insert into coc_attribute (id,qq,attribute,player,from_group)values(#{id},#{qq},#{attribute},#{player},#{fromGroup})")
-    public int save(CocAttribute cocAttribute);
+    int save(CocAttribute cocAttribute);
 
-    @Update("update coc_attribute set attribute = #{attribute},player=#{player} where qq = #{fromQQ} && from_group =#{fromGroup}")
-    public void updateByFromQQ(@Param("attribute") String attribute, @Param("player") String player, @Param("fromQQ") long fromQQ,@Param("fromGroup") long fromGroup);
+    @Update("update coc_attribute set attribute = #{attribute} where qq = #{fromQQ} && from_group =#{fromGroup}")
+    void updateAttributeByFromQQ(@Param("attribute") String attribute, @Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup);
+
+    @Update("update coc_attribute set player = #{player} attribute = #{attribute} where qq = #{fromQQ} && from_group =#{fromGroup}")
+    void updataAttributeAndPalyerByQQ(@Param("attribute") String attribute, @Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup, @Param("player") String player);
 
     @Select("select attribute from coc_attribute where qq = #{fromQQ} && from_group=#{fromGroup}")
-    public String findAttributeByFromQQ(@Param("fromQQ") long fromQQ,@Param("fromGroup")long fromGroup);
+    String findAttributeByFromQQ(@Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup);
 
     @Delete("delete from coc_attribute where qq=#{fromQQ} && from_group = #{fromGroup}")
-    public int deleteByFromQQAndGroup(@Param("fromQQ") long fromQQ,@Param("fromGroup") long fromGroup);
+    int deleteByFromQQAndGroup(@Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup);
 
-
+    @Select("select player from coc_attribute where qq = #{fromQQ} && from_group=#{fromGroup}")
+    String findPlayerNikeByFromQQAndGroup(@Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup);
 }

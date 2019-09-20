@@ -9,16 +9,16 @@ package com.aominfosystem.pulg.TRPGRoll;
 public interface RollTheDice {
 
     //.ra
-    public String RollAttribute(String parameter, long fromqq, long fromGroup);
+    public String rollAttribute(String parameter, long fromqq, long fromGroup);
     //.rc
-    public String RollCustomAttribute(String parameter, long fromqq, long fromGroup);
+    public String rollCustomAttribute(String parameter, long fromqq, long fromGroup);
     //.r
-    public String RollRandom(String parameter, long fromqq, long fromGroup);
+    public String rollRandom(String parameter, long fromqq, long fromGroup);
 
     //.sc
-    public String RollSCCheck(String parameter, long fromqq, long fromGroup);
+    public String rollSCCheck(String parameter, long fromqq, long fromGroup);
 
-    String RollSHCheck(String parameter, long fromqq, long fromGroup);
+    String rollSHCheck(String parameter, long fromqq, long fromGroup);
 
 
 

@@ -27,9 +27,12 @@ public class RegularExpressionUtils {
 
 
     public static String getMatcherString(String regex, String source) {
+        if (source == null) return null;
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(source);
-        matcher.find();
+
+        if (!matcher.find()) return null;
+
         return matcher.group();
     }
 }

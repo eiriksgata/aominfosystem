@@ -1,18 +1,14 @@
 package com.aominfosystem;
 
 
-import com.aominfosystem.json.searchbean.SearchBeanVo;
 import com.aominfosystem.pulg.TRPGRoll.AttributeManagerImpl;
 import com.aominfosystem.pulg.TRPGRoll.RollTheDiceImpl;
-import com.aominfosystem.utils.HttpClientUtils;
 import com.aominfosystem.vo.HttpClientResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.aominfosystem.pulg.TRPGRoll.RollTheDiceImpl.formulaCalculation;
 
 /**
  * @author: create by admin
@@ -35,10 +31,10 @@ public class Main {
         RollTheDiceImpl rollTheDice = new RollTheDiceImpl();
 //        for (int i = 0; i < 100; i++) {
 //            System.out.println(rollTheDice.RollAttribute("力量", 1456, 125678));
-//
+//r
 //        }
 
-        System.out.println(rollTheDice.RollRandom("1d2+1d3-1d5*(5+1d3)",123,123));
+        System.out.println(rollTheDice.rollRandom("2d3",1456,125678));
     }
 
 

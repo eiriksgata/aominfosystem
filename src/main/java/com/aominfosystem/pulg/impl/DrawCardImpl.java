@@ -7,13 +7,13 @@ import com.aominfosystem.pojo.Cardgroup;
 import com.aominfosystem.pojo.Usercardbag;
 import com.aominfosystem.pulg.DrawCard;
 import com.aominfosystem.utils.MyBatisUtil;
-import com.sobte.cqp.jcq.entity.Member;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
 
 import static com.sobte.cqp.jcq.event.JcqApp.CC;
 import static com.sobte.cqp.jcq.event.JcqApp.CQ;
+
 
 /**
  * @author: create by Keith

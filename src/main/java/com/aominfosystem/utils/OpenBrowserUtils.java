@@ -3,8 +3,8 @@ package com.aominfosystem.utils;
 
 import java.awt.*;
 
-import java.net.URI;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.Map;
 
 public class OpenBrowserUtils {
