@@ -198,6 +198,8 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
         CocAttributeMapper cocAttributeMapper;
         String findAllAttribute;
         String value;
+        //设置 改变数值的数据内容 如+5
+        value = parameterTypeData[0];
         try {
             cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
         } catch (Exception e) {
@@ -207,6 +209,9 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
         if (findAllAttribute == null) {
             return customResult(rollSHCheckError, "没有数据");
         }
+        if (parameterTypeData[0].charAt(0) != '+' && parameterTypeData[0].charAt(0) != '-') {
+            return customResult(rollSHCheckError, "格式错误");
+        }
 
         if (parameterTypeData.length > 1 && parameterTypeData.length < 3) {
 
@@ -214,13 +219,6 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
             String regex = inputAttribute + "\\d[0-9]*";
             String findAttribute = RegularExpressionUtils.getMatcherString(regex, findAllAttribute);
             String attributeData = findAttribute.substring(inputAttribute.length());
-
-            //设置 改变数值的数据内容 如+5
-            value = parameterTypeData[0];
-
-            if (parameterTypeData[0].charAt(1)!='+'&&parameterTypeData[0].charAt(1)!='-'){
-                return customResult(rollSHCheckError,"格式错误");
-            }
 
             //利用Calc来进行字符串计算
             String count = String.valueOf(new Calc(attributeData + value).getResult());
@@ -235,7 +233,7 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
             String playerHpMax = RegularExpressionUtils.getMatcherString("体力\\d[0-9]*", findAllAttribute).substring(2);
             String playerNike = cocAttributeMapper.findPlayerNikeByFromQQAndGroup(fromqq, fromGroup);
             String attributeData = findHPAttribute.substring(2);
-            value = parameterTypeData[0];
+
             String count = String.valueOf(new Calc(attributeData + value).getResult());
             findAllAttribute = findAllAttribute.replace(findHPAttribute, "hp" + count);
             cocAttributeMapper.updateAttributeByFromQQ(findAllAttribute, fromqq, fromGroup);
@@ -253,18 +251,18 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
     // 奖励 和 惩罚
     //0奖励 1 惩罚
-    public static int[] rewardPunishmentFormulaCalculation(int diceNumber,String attribute,int type){
+    public static int[] rewardPunishmentFormulaCalculation(int diceNumber, String attribute, int type) {
         int randomList[] = new int[diceNumber];
 
-        for (int i=0;i<diceNumber;i++){
+        for (int i = 0; i < diceNumber; i++) {
             randomList[i] = (int) Math.floor(Math.random() * 11);
-            System.out.print(randomList[i]+",");
+            System.out.print(randomList[i] + ",");
         }
 
         //排序
-        for (int i=0;i<randomList.length;i++){
-            for (int j=0;j<randomList.length;j++){
-                if (randomList[i]<randomList[j]){
+        for (int i = 0; i < randomList.length; i++) {
+            for (int j = 0; j < randomList.length; j++) {
+                if (randomList[i] < randomList[j]) {
                     int t = randomList[i];
                     randomList[i] = randomList[j];
                     randomList[j] = t;

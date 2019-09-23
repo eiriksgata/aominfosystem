@@ -45,7 +45,7 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
                     return customResult(attributeEntryMessageError, e.toString());
                 }
             } else {
-                cocAttributeMapper.updataAttributeAndPalyerByQQ(parameter, fromqq, fromGroup,member.getCard());
+                cocAttributeMapper.updateAttributeAndPalyerByQQ(parameter, fromqq, fromGroup,member.getCard());
             }
             MyBatisUtil.closeSession();
             try {

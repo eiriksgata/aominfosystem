@@ -19,8 +19,8 @@ public interface CocAttributeMapper {
     @Update("update coc_attribute set attribute = #{attribute} where qq = #{fromQQ} && from_group =#{fromGroup}")
     void updateAttributeByFromQQ(@Param("attribute") String attribute, @Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup);
 
-    @Update("update coc_attribute set player = #{player} attribute = #{attribute} where qq = #{fromQQ} && from_group =#{fromGroup}")
-    void updataAttributeAndPalyerByQQ(@Param("attribute") String attribute, @Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup, @Param("player") String player);
+    @Update("update coc_attribute set player = #{player}, attribute = #{attribute} where qq = #{fromQQ} && from_group =#{fromGroup}")
+    void updateAttributeAndPalyerByQQ(@Param("attribute") String attribute, @Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup, @Param("player") String player);
 
     @Select("select attribute from coc_attribute where qq = #{fromQQ} && from_group=#{fromGroup}")
     String findAttributeByFromQQ(@Param("fromQQ") long fromQQ, @Param("fromGroup") long fromGroup);
