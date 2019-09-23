@@ -33,8 +33,7 @@ public class Main {
 //            System.out.println(rollTheDice.RollAttribute("力量", 1456, 125678));
 //r
 //        }
-
-        System.out.println(rollTheDice.rollRandom("2d3",1456,125678));
+        System.out.println(rollTheDice.rewardPunishmentFormulaCalculation(3,"",0));
     }
 
 

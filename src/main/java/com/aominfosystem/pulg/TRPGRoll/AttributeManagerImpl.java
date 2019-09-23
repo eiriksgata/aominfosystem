@@ -46,7 +46,6 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
                 }
             } else {
                 cocAttributeMapper.updataAttributeAndPalyerByQQ(parameter, fromqq, fromGroup,member.getCard());
-
             }
             MyBatisUtil.closeSession();
             try {
@@ -55,7 +54,7 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
                 String memberNike = member.getCard() + "[HP:" + playerHp + "/" + playerHpMax + "]";
                 CQ.setGroupCard(fromGroup, fromqq, memberNike);
             } catch (Exception e) {
-                return customResult(attributeEntryMessageSuccess, "没有找到hp属性，故不自动修改昵称");
+                return customResult(attributeEntryMessageSuccess, "没有找到hp或者体力属性，故不自动修改昵称");
             }
 
 
@@ -98,6 +97,7 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
         MyBatisUtil.closeSession();
         return customResult(attributeDeleteMessageSuccess);
     }
+
 
     @Override
     public String playerAttributeFindAll(long fromQQ, long fromGroup) {
