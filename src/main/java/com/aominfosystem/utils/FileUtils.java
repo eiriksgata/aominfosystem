@@ -72,14 +72,14 @@ public class FileUtils {
      */
     public static String ReadFile(String Path) {
         BufferedReader reader = null;
-        String laststr = "";
+        StringBuilder laststr = new StringBuilder();
         try {
             FileInputStream fileInputStream = new FileInputStream(Path);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
             reader = new BufferedReader(inputStreamReader);
             String tempString = null;
             while ((tempString = reader.readLine()) != null) {
-                laststr += tempString;
+                laststr.append(tempString).append("\n");
             }
             reader.close();
         } catch (IOException e) {
@@ -93,7 +93,7 @@ public class FileUtils {
                 }
             }
         }
-        return laststr;
+        return laststr.toString();
     }
 
     /**

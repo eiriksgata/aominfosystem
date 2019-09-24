@@ -52,14 +52,22 @@ public class ResultMessageHandle {
                 return member.getCard();
             case "{member.getNick}":
                 return member.getNick();
-            case "{member.getTitle":
+            case "{member.getTitle}":
                 return member.getTitle();
-            case "member.getArea":
+            case "{member.getArea}":
                 return member.getArea();
-            case "member.getAge":
+            case "{member.getAge}":
                 return String.valueOf(member.getAge());
-            case "member.getGender":
+            case "{member.getGender}":
                 return String.valueOf(member.getGender());
+            case "{member.getGroupId}":
+                return String.valueOf(member.getGroupId());
+            case "{member.getLastTime}":
+                return member.getLastTime().toString();
+            case "{member.getAuthority}":
+                return String.valueOf(member.getAuthority());
+            case "{member.getAddTime}":
+                return String.valueOf(member.getAddTime().toString());
             case "{at}":
                 return CC.at(member.getQqId());
             default:

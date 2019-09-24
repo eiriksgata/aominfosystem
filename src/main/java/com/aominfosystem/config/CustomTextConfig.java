@@ -45,6 +45,28 @@ public class CustomTextConfig {
     public static String rollSHCheckError = "rollSHCheckError";
     public static String rollSHCheckHPSuccess = "rollSHCheckHPSuccess";
 
+    //.rb
+    public static String rollRbBigSuccess = "rollRbBigSuccess";
+    public static String rollRbExSuccess = "rollRbExSuccess";
+    public static String rollRbDifficultySuccess = "rollRbDifficultySuccess";
+    public static String rollRbSuccess = "rollRbSuccess";
+    public static String rollRbFail = "rollRbFail";
+    public static String rollRbBigFail = "rollRbBigFail";
+    public static String rollRbError = "rollRbError";
+
+    //.rp
+    public static String rollRpBigSuccess = "rollRpBigSuccess";
+    public static String rollRpExSuccess = "rollRpExSuccess";
+    public static String rollRpDifficultySuccess = "rollRpDifficultySuccess";
+    public static String rollRpSuccess = "rollRpSuccess";
+    public static String rollRpFail = "rollRpFail";
+    public static String rollRpBigFail = "rollRpBigFail";
+    public static String rollRpError = "rollRpError";
+
+    //.rh
+    public static String rollRhSuccess = "rollRhSuccess";
+    public static String rollRhPrivateSuccess = "rollRhPrivateSuccess";
+    public static String rollRhError = "rollRhError";
     public static Map<String, String> customText = new HashMap<>();
     static {
         //默认值
@@ -59,6 +81,7 @@ public class CustomTextConfig {
         customText.put(attributeFindByValueError,"查询没有结果");
 
         //roll 0为 随机数值 1为属性值 2为判断属性名 3投骰人
+        //ra
         customText.put(rollRaAttributeSuccess,"{member.getCard} {2}:{0}/{1} ok {3}");
         customText.put(rollRaAttributeBigSuccess,"{member.getCard} {2}:{0}/{1} {3}Big ok");
         customText.put(rollRaAttributeExSuccess,"{member.getCard} {2}:{0}/{1} {3}Ex ok");
@@ -71,7 +94,7 @@ public class CustomTextConfig {
         customText.put(rollRaAttributeError,"{0}");
 
         //参数0返回计算过程 1返回公式随机数值
-        customText.put(rollRandomSuccess,"{0}={1} {2}");
+        customText.put(rollRandomSuccess,"{member.getCard}:{0}={1}");
         //计算出错，返回出错内容
         customText.put(rollRandomError,"{0}");
 
@@ -82,9 +105,33 @@ public class CustomTextConfig {
         customText.put(rollSCCheckError,"{member.getCard}输入正确的指令:{0}");
 
         //.sh
-        customText.put(rollSHCheckSuccess,"{member.getCard} 属性{0} 你有{1}  {2} = {3} ");
-        customText.put(rollSHCheckError,"{member.getCard} {0}");
-        customText.put(rollSHCheckHPSuccess,"{member,getCard} hp:{0}  {1} = {2}");
+        customText.put(rollSHCheckSuccess,"{member.getCard} 属性{0} 你有{1}  {2} = {3} ok ");
+        customText.put(rollSHCheckError,"{member.getCard} {0} error");
+        customText.put(rollSHCheckHPSuccess,"{member,getCard} hp:{0}  {1} = {2} ok");
+
+        //.rb
+        customText.put(rollRbSuccess,"{member.getCard} {0} {1}  {2}  {3} {4} ok rb");
+        customText.put(rollRbBigSuccess,"{member.getCard} {0} {1}  {2}  {3} {4} big ok rb" );
+        customText.put(rollRbExSuccess,"{member.getCard} {0} {1}  {2}  {3} {4} ex ok rb");
+        customText.put(rollRbDifficultySuccess,"{member.getCard} {0} {1}  {2}  {3} {4} difficulty ok rb");
+        customText.put(rollRbBigFail,"{member.getCard} {0} {1}  {2}  {3} {4} fail rb");
+        customText.put(rollRbFail,"{member.getCard} {0} {1}  {2}  {3} {4} big fail rb");
+        customText.put(rollRbError,"{member.getCard} {0} error");
+
+        //.rp
+        customText.put(rollRpSuccess,"{member.getCard} {0} {1}  {2}  {3} {4} ok rp");
+        customText.put(rollRpBigSuccess,"{member.getCard} {0} {1}  {2}  {3} {4} big ok rp");
+        customText.put(rollRpExSuccess,"{member.getCard} {0} {1}  {2}  {3} {4}Ex ok rp");
+        customText.put(rollRpDifficultySuccess,"{member.getCard} {0} {1}  {2}  {3} {4} difficulty ok rp");
+        customText.put(rollRpBigFail,"{member.getCard} {0} {1}  {2}  {3} {4} big fail rp");
+        customText.put(rollRpFail,"{member.getCard} {0} {1}  {2}  {3} {4} fail rp");
+        customText.put(rollRpError,"{member.getCard} {0} error");
+
+        //rh
+        customText.put(rollRhSuccess,"{member.getCard} ok");
+        customText.put(rollRhPrivateSuccess,"在{0} ({member.getGroupId})中{member.getCard} 骰出了: D100= {1}");
+        customText.put(rollRhError,"{member.getCard} {0} error");
+
     }
 
 

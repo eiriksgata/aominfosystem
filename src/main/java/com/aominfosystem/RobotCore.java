@@ -6,6 +6,7 @@ import com.aominfosystem.config.GlobalConfig;
 import com.aominfosystem.config.ReadLocalConfigFile;
 import com.aominfosystem.controller.GroupMessageRecord;
 import com.aominfosystem.controller.MessageController;
+import com.aominfosystem.pulg.TRPGRoll.RollTheDiceImpl;
 import com.aominfosystem.utils.ConfigurationFile;
 import com.aominfosystem.utils.OpenBrowserUtils;
 import com.aominfosystem.utils.RegularExpressionUtils;
@@ -30,7 +31,6 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     private MessageController messageController = new MessageController();
 
 
-
     /**
      * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
      * 以下就是使用Main方法进行测试的一个简易案例
@@ -49,11 +49,15 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         demo.enable();// 程序初始化完成后，启用应用，让应用正常工作
 
         //System.out.println(CQ.getAppDirectory());
-       // 模拟群聊消息
+        // 模拟群聊消息
         // 开始模拟群聊消息
         //demo.groupMsg(0, 10008, 123456, 77777, "", ">_musicFind xiami,soldout", 0);
-        demo.groupMsg(0, 10008, 123456, 23456, "", ".sh 5 san", 0);
+        demo.groupMsg(0, 10008, 783679747, 2353686862L, "", ".r 1d2+2d3", 0);
 
+//        RollTheDiceImpl rollTheDice = new RollTheDiceImpl();
+//        for (int i = 0; i < 1; i++) {
+//            System.out.println(rollTheDice.rollHide("", 2353686862L, 783679747));
+//        }
 
         // ......
         // 依次类推，可以根据实际情况修改参数，和方法测试效果
@@ -107,7 +111,6 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     }
 
 
-
     /**
      * 私聊消息 (Type=21)<br>
      * 本方法会在酷Q【线程】中被调用。<br>
@@ -151,9 +154,9 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 
         //对群消息进行逻辑处理
-        String result = messageController.messageAfferent(msgId,fromGroup,fromQQ,fromAnonymous,msg);
-        if (result!= null){
-            CQ.sendGroupMsg(fromGroup,result);
+        String result = messageController.messageAfferent(msgId, fromGroup, fromQQ, fromAnonymous, msg);
+        if (result != null) {
+            CQ.sendGroupMsg(fromGroup, result);
             /*//延迟发送消息，以免被QQ检测到
             Timer timer = new Timer();
             //long time = (long)(Math.random()*2000);
@@ -164,9 +167,9 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                 }
             }, 0 );
 */
-        }else {
+        } else {
             //对群里发送的消息进行记录
-            groupMessageRecord.messageRecord(msgId,fromGroup,fromQQ,fromAnonymous,msg);
+            groupMessageRecord.messageRecord(msgId, fromGroup, fromQQ, fromAnonymous, msg);
         }
 
 
@@ -391,9 +394,9 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      */
     public int OpenCurrentFolder() {
         JOptionPane.showMessageDialog(null, "打开后会跳转到当前程序运行文件夹");
-        try{
-            Runtime.getRuntime().exec("cmd /c start explorer "+ System.getProperty("user.dir"));
-        }catch (Exception e){
+        try {
+            Runtime.getRuntime().exec("cmd /c start explorer " + System.getProperty("user.dir"));
+        } catch (Exception e) {
             System.out.println("打开当前文件夹遇到了问题:" + e.toString());
         }
         return 0;
@@ -413,10 +416,9 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         JOptionPane.showMessageDialog(null, "从网络上下载Java插件运行所需要的包并自动解压,下载进度请看控制台.请不要随便下载，如果控制台说缺少某文件时可以使用");
         String downloadUrl = "https://keithtools-1257541903.cos.ap-guangzhou.myqcloud.com/lib.zip";
         String applicationPath = CQ.getAppDirectory();
-        downLoadFromUrl(downloadUrl,"lib.zip",applicationPath);
+        downLoadFromUrl(downloadUrl, "lib.zip", applicationPath);
         return 0;
     }
-
 
 
 }

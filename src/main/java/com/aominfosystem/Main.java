@@ -28,12 +28,13 @@ public class Main {
 //
 //        System.out.println(result);
 
-        RollTheDiceImpl rollTheDice = new RollTheDiceImpl();
+
 //        for (int i = 0; i < 100; i++) {
 //            System.out.println(rollTheDice.RollAttribute("力量", 1456, 125678));
 //r
 //        }
-        System.out.println(rollTheDice.rewardPunishmentFormulaCalculation(3,"",0));
+        RollTheDiceImpl rollTheDice = new RollTheDiceImpl();
+        System.out.println(rollTheDice.rollReward("hp",2353686862L,783679747));
     }
 
 

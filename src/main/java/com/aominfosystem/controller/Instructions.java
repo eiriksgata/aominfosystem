@@ -133,6 +133,14 @@ class Instructions {
                     return rollTheDice.rollRandom(parameter, fromqq, fromGroup);
                 case "ra":
                     return rollTheDice.rollAttribute(parameter, fromqq, fromGroup);
+                case "rc":
+                    return rollTheDice.rollAttribute(parameter, fromqq, fromGroup);
+                case "rb":
+                    return rollTheDice.rollReward(parameter, fromqq, fromGroup);
+                case "rp":
+                    return rollTheDice.rollPunishment(parameter, fromqq, fromGroup);
+                case "rh":
+                    return rollTheDice.rollHide(parameter, fromqq, fromGroup);
 
                 default:
                     return null;
@@ -248,7 +256,6 @@ class Instructions {
      * @return
      */
     private Boolean orderMessageConfirm(String msg) {
-        System.out.println(1);
         if (msg.length() > 2) {
             if (GlobalConfig.instructionsPrefix.equals("1")) {
                 return msg.substring(0, 1).equals(InstructionsConfig.prefix1);

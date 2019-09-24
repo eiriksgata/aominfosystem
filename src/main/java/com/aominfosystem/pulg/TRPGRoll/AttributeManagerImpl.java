@@ -54,11 +54,11 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
                 String memberNike = member.getCard() + "[HP:" + playerHp + "/" + playerHpMax + "]";
                 CQ.setGroupCard(fromGroup, fromqq, memberNike);
             } catch (Exception e) {
-                return customResult(attributeEntryMessageSuccess, "没有找到hp或者体力属性，故不自动修改昵称");
+                return customResult(attributeEntryMessageSuccess,member, "没有找到hp或者体力属性，故不自动修改昵称");
             }
 
 
-            return customResult(attributeEntryMessageSuccess, "");
+            return customResult(attributeEntryMessageSuccess, member, "");
         }
 
         return customResult(attributeEntryMessageError, "输入格式错误");
@@ -81,7 +81,7 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
             return customResult(attributeUpdateMessageError, "更新数据异常");
         }
         MyBatisUtil.closeSession();
-        return customResult(attributeUpdateMessageSuccess);
+        return customResult(attributeUpdateMessageSuccess,CQ.getGroupMemberInfo(fromGroup,fromQQ,true));
     }
 
     //.deleteAttribute
@@ -112,7 +112,7 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
         CocAttributeMapper cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
         String regex = parameter + "\\d[0-9]*";
         List<String> result = RegularExpressionUtils.getMatchers(regex, cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup));
-        return result.size() > 0 ? customResult(attributeFindByValueSuccess, result.get(0)) : customResult(attributeFindByValueError);
+        return result.size() > 0 ? customResult(attributeFindByValueSuccess,CQ.getGroupMemberInfo(fromGroup,fromQQ), result.get(0)) : customResult(attributeFindByValueError);
     }
 
 }
