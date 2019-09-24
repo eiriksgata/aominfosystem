@@ -59,9 +59,9 @@ public class CreateSystemFile {
                         "switch=false\r\n" +
                         ";消息记录的群列表\r\n" +
                         "recordGroupList=123456,123456789\r\n" +
-                        ";COC文本设置\r\n" +
-                        "[COCText]" +
-                        "";
+                        ";COC骰子设置\r\n" +
+                        "[COCRoll]\r\n" +
+                        "rollFaceNumber=100";
 
                 ImportInfoFromText.writeToTxt(folderName + "\\" + "CardGroupDate.txt");
 

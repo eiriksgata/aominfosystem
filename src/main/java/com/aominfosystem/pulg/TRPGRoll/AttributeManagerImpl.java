@@ -45,7 +45,7 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
                     return customResult(attributeEntryMessageError, e.toString());
                 }
             } else {
-                cocAttributeMapper.updateAttributeAndPalyerByQQ(parameter, fromqq, fromGroup,member.getCard());
+                cocAttributeMapper.updateAttributeAndPalyerByQQ(parameter, fromqq, fromGroup, member.getCard());
             }
             MyBatisUtil.closeSession();
             try {
@@ -54,7 +54,7 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
                 String memberNike = member.getCard() + "[HP:" + playerHp + "/" + playerHpMax + "]";
                 CQ.setGroupCard(fromGroup, fromqq, memberNike);
             } catch (Exception e) {
-                return customResult(attributeEntryMessageSuccess,member, "没有找到hp或者体力属性，故不自动修改昵称");
+                return customResult(attributeEntryMessageSuccess, member, "没有找到hp或者体力属性，故不自动修改昵称");
             }
 
 
@@ -68,20 +68,27 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
     @Override
     public String playerAttributeSet(String parameter, long fromQQ, long fromGroup) {
 
-        CocAttributeMapper cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
-        String findResult = cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup);
-        String data[] = parameter.split(" ");
-        String regex = data[0] + "\\d[0-9]*";
-        List<String> regexResult = RegularExpressionUtils.getMatchers(regex, findResult);
-        String setStr = findResult.replace(regexResult.get(0), data[0] + data[1]);
         try {
-            cocAttributeMapper.updateAttributeByFromQQ(setStr, fromQQ, fromGroup);
+            CocAttributeMapper cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
+            String findResult = cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup);
+            String data[] = parameter.split(" ");
+            String regex = data[0] + "\\d[0-9]*";
+            List<String> regexResult = RegularExpressionUtils.getMatchers(regex, findResult);
+            String setStr = findResult.replace(regexResult.get(0), data[0] + data[1]);
+            try {
+                cocAttributeMapper.updateAttributeByFromQQ(setStr, fromQQ, fromGroup);
+            } catch (Exception e) {
+                System.out.println(e.toString());
+                return customResult(attributeUpdateMessageError, "更新数据异常");
+            }
+            MyBatisUtil.closeSession();
+            return customResult(attributeUpdateMessageSuccess, CQ.getGroupMemberInfo(fromGroup, fromQQ, true));
+
         } catch (Exception e) {
-            System.out.println(e.toString());
-            return customResult(attributeUpdateMessageError, "更新数据异常");
+            return customResult(attributeUpdateMessageError, CQ.getGroupMemberInfo(fromGroup, fromQQ, true), "录入错误");
+
         }
-        MyBatisUtil.closeSession();
-        return customResult(attributeUpdateMessageSuccess,CQ.getGroupMemberInfo(fromGroup,fromQQ,true));
+
     }
 
     //.deleteAttribute
@@ -112,7 +119,7 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
         CocAttributeMapper cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
         String regex = parameter + "\\d[0-9]*";
         List<String> result = RegularExpressionUtils.getMatchers(regex, cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup));
-        return result.size() > 0 ? customResult(attributeFindByValueSuccess,CQ.getGroupMemberInfo(fromGroup,fromQQ), result.get(0)) : customResult(attributeFindByValueError);
+        return result.size() > 0 ? customResult(attributeFindByValueSuccess, CQ.getGroupMemberInfo(fromGroup, fromQQ), result.get(0)) : customResult(attributeFindByValueError);
     }
 
 }

@@ -141,6 +141,10 @@ class Instructions {
                     return rollTheDice.rollPunishment(parameter, fromqq, fromGroup);
                 case "rh":
                     return rollTheDice.rollHide(parameter, fromqq, fromGroup);
+                case "set":
+                    return rollTheDice.rollSetFaceNumber(parameter, fromqq, fromGroup);
+                case "setCoc":
+                    return rollTheDice.rollSetCocHouseRulesNumber(parameter, fromqq, fromGroup);
 
                 default:
                     return null;

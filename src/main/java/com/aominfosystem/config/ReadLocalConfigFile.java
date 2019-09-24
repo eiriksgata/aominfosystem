@@ -50,7 +50,6 @@ public class ReadLocalConfigFile {
                 }
                 customText.put(data[0],data[1]);
             }
-            System.out.println(customText.get("rollRandomSuccess"));
             System.out.println("coc文本载入完毕");
 
 

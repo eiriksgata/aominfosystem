@@ -7,6 +7,7 @@ import com.sobte.cqp.jcq.entity.Member;
 import java.util.List;
 
 import static com.aominfosystem.config.CustomTextConfig.customText;
+import static com.aominfosystem.config.GlobalConfig.rollFaceNumber;
 import static com.sobte.cqp.jcq.event.JcqApp.CC;
 
 /**
@@ -70,6 +71,8 @@ public class ResultMessageHandle {
                 return String.valueOf(member.getAddTime().toString());
             case "{at}":
                 return CC.at(member.getQqId());
+            case "{rollFaceNumber}":
+                return String.valueOf(rollFaceNumber);
             default:
                 return input;
         }

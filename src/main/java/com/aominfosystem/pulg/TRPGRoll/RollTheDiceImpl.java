@@ -2,18 +2,17 @@ package com.aominfosystem.pulg.TRPGRoll;
 
 import com.aominfosystem.controller.ResultMessageHandle;
 import com.aominfosystem.mapper.CocAttributeMapper;
-import com.aominfosystem.pojo.CocAttribute;
-import com.aominfosystem.utils.Calc;
-import com.aominfosystem.utils.MyBatisUtil;
-import com.aominfosystem.utils.RegularExpressionUtils;
-import com.aominfosystem.utils.TypeTesting;
+import com.aominfosystem.utils.*;
 import com.sobte.cqp.jcq.entity.Group;
 import com.sobte.cqp.jcq.entity.Member;
 import org.apache.ibatis.session.SqlSession;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.aominfosystem.config.CustomTextConfig.*;
+import static com.aominfosystem.config.GlobalConfig.rollFaceNumber;
+import static com.aominfosystem.config.GlobalConfig.rollHouseRulesNumber;
 import static com.sobte.cqp.jcq.event.JcqApp.CQ;
 
 /**
@@ -24,77 +23,114 @@ import static com.sobte.cqp.jcq.event.JcqApp.CQ;
  **/
 public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice {
 
-    //ra
+    //.set
     @Override
-    public String rollAttribute(String parameter, long fromQQ, long fromGroup) {
-
-        //判定参数个数
-        String inputData[] = parameter.split(" ");
-        Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ, true);
-        int random = 1 + (int) Math.floor(Math.random() * 100);
-
-        if (inputData.length > 1) {
-            //大成功
-            if (random == 1) {
-                return customResult(rollRaAttributeBigSuccess, member, String.valueOf(random), inputData[1], inputData[0]);
-            }
-            //大失败
-            if (random == 100) {
-                return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
-            }
-
-            //ex
-
-            if (random <= (int) Math.floor(Float.valueOf(inputData[1]) / 5)) {
-                return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
-            }
-            //dif
-            if (random <= (int) Math.floor(Float.valueOf(inputData[1]) / 2)) {
-                return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
-            }
-
-
-            if (random <= Integer.valueOf(inputData[1])) {
-                return customResult(rollRaAttributeSuccess, member, String.valueOf(random), inputData[1], inputData[0]);
-            } else {
-                return customResult(rollRaAttributeFail, member, String.valueOf(random), inputData[1], inputData[0]);
-            }
-        } else {
-
-            SqlSession session = MyBatisUtil.getSession();
-            CocAttributeMapper cocAttributeMapper = session.getMapper(CocAttributeMapper.class);
-            String findAttribute = cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup);
-            String regex = parameter + "\\d[0-9]*";
-            if (findAttribute == null) {
-                return customResult(rollRaAttributeError, "查询不到数据");
-            }
-            String regexFindString = RegularExpressionUtils.getMatcherString(regex, findAttribute);
-            String attributeValue = regexFindString.substring(parameter.length());
-
-            //大成功判定
-            if (random == 1) {
-                return customResult(rollRaAttributeBigSuccess, member, String.valueOf(random), attributeValue, inputData[0]);
-            }
-            //大失败判定
-            if (random == 100) {
-                return customResult(rollRaAttributeBigFail, member, String.valueOf(random), attributeValue, inputData[0]);
-            }
-            //极难
-            if (random <= (int) Math.floor(Float.valueOf(attributeValue) / 5)) {
-                return customResult(rollRaAttributeExSuccess, member, String.valueOf(random), attributeValue, inputData[0]);
-            }
-            //困难
-            if (random <= (int) Math.floor(Float.valueOf(attributeValue) / 2)) {
-                return customResult(rollRaAttributeDifficultySuccess, member, String.valueOf(random), attributeValue, inputData[0]);
-            }
-            //普通
-            if (random <= Integer.valueOf(attributeValue)) {
-                return customResult(rollRaAttributeSuccess, member, String.valueOf(random), attributeValue, inputData[0]);
-            } else {
-                return customResult(rollRaAttributeFail, member, String.valueOf(random), attributeValue, inputData[0]);
+    public String rollSetFaceNumber(String parameter,long fromQQ,long fromGroup){
+        TypeTesting typeTesting = new TypeTesting();
+        if (typeTesting.isInt(parameter)){
+          rollFaceNumber = Integer.valueOf(parameter);
+            try {
+                ConfigurationFile.writeCfgValue("aominfosystemConf" + "\\" + "aominfosystemConfig.ini", "COCRoll", "rollFaceNumber", String.valueOf(rollFaceNumber));
+                return "骰子面数设置为:" + String.valueOf(rollFaceNumber);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
         }
+        return "参数格式错误";
+    }
+
+    //.setCoc
+    @Override
+    public String rollSetCocHouseRulesNumber(String parameter, long fromQQ, long fromGroup){
+        TypeTesting typeTesting = new TypeTesting();
+        if (typeTesting.isInt(parameter)){
+            rollHouseRulesNumber = Integer.valueOf(parameter);
+            try {
+                ConfigurationFile.writeCfgValue("aominfosystemConf" + "\\" + "aominfosystemConfig.ini", "COCRoll", "rollHouseRulesNumber", String.valueOf(rollHouseRulesNumber));
+                return "房规改为:" + String.valueOf(rollHouseRulesNumber);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "参数格式错误";
+    }
+
+    //ra
+    @Override
+    public String rollAttribute(String parameter, long fromQQ, long fromGroup) {
+        Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ, true);
+        try {
+            //判定参数个数
+            String inputData[] = parameter.split(" ");
+            int random = 1 + (int) Math.floor(Math.random() * rollFaceNumber);
+
+            if (inputData.length > 1) {
+                //大成功
+                if (random <= rollHouseRulesNumber && random <= Integer.valueOf(inputData[1])) {
+                    return customResult(rollRaAttributeBigSuccess, member, String.valueOf(random), inputData[1], inputData[0]);
+                }
+                //大失败
+                if (random > 100-rollHouseRulesNumber) {
+                    return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
+                }
+
+                //ex
+
+                if (random <= (int) Math.floor(Float.valueOf(inputData[1]) / 5)) {
+                    return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
+                }
+                //dif
+                if (random <= (int) Math.floor(Float.valueOf(inputData[1]) / 2)) {
+                    return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
+                }
+
+
+                if (random <= Integer.valueOf(inputData[1])) {
+                    return customResult(rollRaAttributeSuccess, member, String.valueOf(random), inputData[1], inputData[0]);
+                } else {
+                    return customResult(rollRaAttributeFail, member, String.valueOf(random), inputData[1], inputData[0]);
+                }
+            } else {
+
+                SqlSession session = MyBatisUtil.getSession();
+                CocAttributeMapper cocAttributeMapper = session.getMapper(CocAttributeMapper.class);
+                String findAttribute = cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup);
+                String regex = parameter + "\\d[0-9]*";
+                if (findAttribute == null) {
+                    return customResult(rollRaAttributeError, "查询不到数据");
+                }
+                String regexFindString = RegularExpressionUtils.getMatcherString(regex, findAttribute);
+                String attributeValue = regexFindString.substring(parameter.length());
+
+                //大成功判定
+                if (random <= rollHouseRulesNumber && random <= Integer.valueOf(attributeValue)) {
+                    return customResult(rollRaAttributeBigSuccess, member, String.valueOf(random), attributeValue, inputData[0]);
+                }
+                //大失败判定
+                if (random > 100-rollHouseRulesNumber) {
+                    return customResult(rollRaAttributeBigFail, member, String.valueOf(random), attributeValue, inputData[0]);
+                }
+                //极难
+                if (random <= (int) Math.floor(Float.valueOf(attributeValue) / 5)) {
+                    return customResult(rollRaAttributeExSuccess, member, String.valueOf(random), attributeValue, inputData[0]);
+                }
+                //困难
+                if (random <= (int) Math.floor(Float.valueOf(attributeValue) / 2)) {
+                    return customResult(rollRaAttributeDifficultySuccess, member, String.valueOf(random), attributeValue, inputData[0]);
+                }
+                //普通
+                if (random <= Integer.valueOf(attributeValue)) {
+                    return customResult(rollRaAttributeSuccess, member, String.valueOf(random), attributeValue, inputData[0]);
+                } else {
+                    return customResult(rollRaAttributeFail, member, String.valueOf(random), attributeValue, inputData[0]);
+                }
+
+            }
+        }catch (Exception e){
+            return customResult(rollRaAttributeError,"参数错误");
+        }
+
 
 
     }
@@ -109,8 +145,8 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
         try {
             String result[] = formulaCalculation(parameter, 0);
-            System.out.println(result[0] + "=" +result [1]);
-            return customResult(rollRandomSuccess,CQ.getGroupMemberInfo(fromGroup,fromQQ,true), result[0], result[1]);
+            System.out.println(result[0] + "=" + result[1]);
+            return customResult(rollRandomSuccess, CQ.getGroupMemberInfo(fromGroup, fromQQ, true), result[0], result[1]);
         } catch (Exception e) {
             return customResult(rollRandomError, e.toString());
         }
@@ -120,90 +156,96 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
     @Override
     public String rollSCCheck(String parameter, long fromQQ, long fromGroup) {
-        String parameterType[] = parameter.split(" ");
-        int random = 1 + (int) Math.floor(Math.random() * 100);
-        Member member = CQ.getGroupMemberInfo(fromGroup,fromQQ,true);
 
-        if (parameterType.length > 1) {
+        try {
+            String parameterType[] = parameter.split(" ");
+            int random = 1 + (int) Math.floor(Math.random() * rollFaceNumber);
+            Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ, true);
 
-            if (parameter.length() > 2) {
-                return customResult(rollSCCheckError,member, "输入正确的指令");
-            }
+            if (parameterType.length > 1) {
 
-            int inputValue = Integer.valueOf(parameterType[1]);
+                if (parameter.length() > 2) {
+                    return customResult(rollSCCheckError, member, "输入正确的指令");
+                }
 
-            //0为成功数值 1为失败数值
-            String data[] = parameterType[0].split("/");
-            String failFormula = data[1];
-            String successFormula = data[0];
+                int inputValue = Integer.valueOf(parameterType[1]);
 
-            //大失败
-            if (random == 100) {
-                String regex = "\\d[0-9]*d\\d[0-9]*";
-                List<String> randomKeyList = RegularExpressionUtils.getMatchers(regex, data[1]);
-                String count;
-                int surplus;
-                String result[] = formulaCalculation(failFormula, 1);
-                count = result[1];
-                surplus = inputValue - Integer.valueOf(count);
-                return customResult(rollSCCheckBigFail,member, String.valueOf(random), String.valueOf(inputValue), failFormula, count, String.valueOf(surplus));
-            }
+                //0为成功数值 1为失败数值
+                String data[] = parameterType[0].split("/");
+                String failFormula = data[1];
+                String successFormula = data[0];
 
-            //失败
-            if (random > inputValue) {
-                String result[] = formulaCalculation(failFormula, 0);
-                int surplus = inputValue - Integer.valueOf(result[1]);
-                return customResult(rollSCCheckFail,member, String.valueOf(random), String.valueOf(inputValue), result[0], result[1], String.valueOf(surplus));
+                //大失败
+                if (random > 100-rollHouseRulesNumber) {
+                    String regex = "\\d[0-9]*d\\d[0-9]*";
+                    List<String> randomKeyList = RegularExpressionUtils.getMatchers(regex, data[1]);
+                    String count;
+                    int surplus;
+                    String result[] = formulaCalculation(failFormula, 1);
+                    count = result[1];
+                    surplus = inputValue - Integer.valueOf(count);
+                    return customResult(rollSCCheckBigFail, member, String.valueOf(random), String.valueOf(inputValue), failFormula, count, String.valueOf(surplus));
+                }
+
+                //失败
+                if (random > inputValue) {
+                    String result[] = formulaCalculation(failFormula, 0);
+                    int surplus = inputValue - Integer.valueOf(result[1]);
+                    return customResult(rollSCCheckFail, member, String.valueOf(random), String.valueOf(inputValue), result[0], result[1], String.valueOf(surplus));
+                } else {
+                    //成功
+                    String result[] = formulaCalculation(successFormula, 0);
+                    int surplus = inputValue - Integer.valueOf(result[1]);
+                    return customResult(rollSCCheckSuccess, member, String.valueOf(random), String.valueOf(inputValue), result[0], result[1], String.valueOf(surplus));
+
+                }
+
             } else {
+                CocAttributeMapper cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
+                String findAllAttribute = cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup);
+                if (findAllAttribute == null) {
+                    return customResult(rollSCCheckError, member, "没有设置属性");
+                }
+                String regex = "san" + "\\d[0-9]*";
+                String attribute = RegularExpressionUtils.getMatcherString(regex, findAllAttribute);
+                int attributeValue = Integer.valueOf(attribute.substring(3));
+                String result[];
+                //0为成功数值 1为失败数值
+                String data[] = parameterType[0].split("/");
+                String failFormula = data[1];
+                String successFormula = data[0];
+                int surplus = 0;
+                MyBatisUtil.closeSession();
+                //大失败
+                if (random > 100-rollHouseRulesNumber) {
+                    result = formulaCalculation(parameter, 1);
+                    surplus = attributeValue - Integer.valueOf(result[1]);
+                    String changeStr = "san " + surplus;
+                    new AttributeManagerImpl().playerAttributeSet(changeStr, fromQQ, fromGroup);
+                    return customResult(rollSCCheckBigFail, member, String.valueOf(random), String.valueOf(attributeValue), result[0], result[1], String.valueOf(surplus));
+                }
+
+                //失败
+                if (random > attributeValue) {
+                    result = formulaCalculation(failFormula, 0);
+                    surplus = attributeValue - Integer.valueOf(result[1]);
+                    String changeStr = "san " + surplus;
+                    new AttributeManagerImpl().playerAttributeSet(changeStr, fromQQ, fromGroup);
+                    return customResult(rollSCCheckFail, member, String.valueOf(random), String.valueOf(attributeValue), result[0], result[1], String.valueOf(surplus));
+                }
+
                 //成功
-                String result[] = formulaCalculation(successFormula, 0);
-                int surplus = inputValue - Integer.valueOf(result[1]);
-                return customResult(rollSCCheckSuccess,member, String.valueOf(random), String.valueOf(inputValue), result[0], result[1], String.valueOf(surplus));
-
-            }
-
-        } else {
-            CocAttributeMapper cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
-            String findAllAttribute = cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup);
-            if (findAllAttribute == null) {
-                return customResult(rollSCCheckError,member, "没有设置属性");
-            }
-            String regex = "san" + "\\d[0-9]*";
-            String attribute = RegularExpressionUtils.getMatcherString(regex, findAllAttribute);
-            int attributeValue = Integer.valueOf(attribute.substring(3));
-            String result[];
-            //0为成功数值 1为失败数值
-            String data[] = parameterType[0].split("/");
-            String failFormula = data[1];
-            String successFormula = data[0];
-            int surplus = 0;
-            MyBatisUtil.closeSession();
-            //大失败
-            if (random == 100) {
-                result = formulaCalculation(parameter, 1);
+                result = formulaCalculation(successFormula, 0);
                 surplus = attributeValue - Integer.valueOf(result[1]);
                 String changeStr = "san " + surplus;
                 new AttributeManagerImpl().playerAttributeSet(changeStr, fromQQ, fromGroup);
-                return customResult(rollSCCheckBigFail,member, String.valueOf(random), String.valueOf(attributeValue), result[0], result[1], String.valueOf(surplus));
+                return customResult(rollSCCheckSuccess, member, String.valueOf(random), String.valueOf(attributeValue), result[0], result[1], String.valueOf(surplus));
+
             }
-
-            //失败
-            if (random > attributeValue) {
-                result = formulaCalculation(failFormula, 0);
-                surplus = attributeValue - Integer.valueOf(result[1]);
-                String changeStr = "san " + surplus;
-                new AttributeManagerImpl().playerAttributeSet(changeStr, fromQQ, fromGroup);
-                return customResult(rollSCCheckFail,member, String.valueOf(random), String.valueOf(attributeValue), result[0], result[1], String.valueOf(surplus));
-            }
-
-            //成功
-            result = formulaCalculation(successFormula, 0);
-            surplus = attributeValue - Integer.valueOf(result[1]);
-            String changeStr = "san " + surplus;
-            new AttributeManagerImpl().playerAttributeSet(changeStr, fromQQ, fromGroup);
-            return customResult(rollSCCheckSuccess,member, String.valueOf(random), String.valueOf(attributeValue), result[0], result[1], String.valueOf(surplus));
-
+        }catch (Exception e){
+            return customResult(rollSCCheckError,"参数数据不正确");
         }
+
     }
 
 
@@ -211,92 +253,110 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
     @Override
     public String rollSHCheck(String parameter, long fromQQ, long fromGroup) {
 
-        //0为数值 1为属性  1个参数时 作为 hp属性
-        String parameterTypeData[] = parameter.split(" ");
-        CocAttributeMapper cocAttributeMapper;
-        String findAllAttribute;
-        String value;
-        Member member = CQ.getGroupMemberInfo(fromGroup,fromQQ,true);
-        //设置 改变数值的数据内容 如+5
-        value = parameterTypeData[0];
-
         try {
-            cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
-        } catch (Exception e) {
-            return customResult(rollSHCheckError, "数据库错误");
+            //0为数值 1为属性  1个参数时 作为 hp属性
+            String parameterTypeData[] = parameter.split(" ");
+            CocAttributeMapper cocAttributeMapper;
+            String findAllAttribute;
+            String value;
+            Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ, true);
+            //设置 改变数值的数据内容 如+5
+            value = parameterTypeData[0];
+
+            try {
+                cocAttributeMapper = MyBatisUtil.getSession().getMapper(CocAttributeMapper.class);
+            } catch (Exception e) {
+                return customResult(rollSHCheckError, "数据库错误");
+            }
+            findAllAttribute = cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup);
+            if (findAllAttribute == null) {
+                return customResult(rollSHCheckError, "没有数据");
+            }
+            if (parameterTypeData[0].charAt(0) != '+' && parameterTypeData[0].charAt(0) != '-') {
+                return customResult(rollSHCheckError, "格式错误");
+            }
+
+            if (parameterTypeData.length > 1 && parameterTypeData.length < 3) {
+
+                String inputAttribute = parameterTypeData[1];
+                String regex = inputAttribute + "\\d[0-9]*";
+                String findAttribute = RegularExpressionUtils.getMatcherString(regex, findAllAttribute);
+                String attributeData = findAttribute.substring(inputAttribute.length());
+
+                //利用Calc来进行字符串计算
+                String count = String.valueOf(new Calc(attributeData + value).getResult());
+
+                findAllAttribute = findAllAttribute.replace(findAttribute, inputAttribute + count);
+                cocAttributeMapper.updateAttributeByFromQQ(findAllAttribute, fromQQ, fromGroup);
+                MyBatisUtil.closeSession();
+
+                return customResult(rollSHCheckSuccess, member, inputAttribute, attributeData, value, count);
+            } else {
+                String findHPAttribute = RegularExpressionUtils.getMatcherString("hp\\d[0-9]*", findAllAttribute);
+                String playerHpMax = RegularExpressionUtils.getMatcherString("体力\\d[0-9]*", findAllAttribute).substring(2);
+                String playerNike = cocAttributeMapper.findPlayerNikeByFromQQAndGroup(fromQQ, fromGroup);
+                String attributeData = findHPAttribute.substring(2);
+
+                String count = String.valueOf(new Calc(attributeData + value).getResult());
+                findAllAttribute = findAllAttribute.replace(findHPAttribute, "hp" + count);
+                cocAttributeMapper.updateAttributeByFromQQ(findAllAttribute, fromQQ, fromGroup);
+                CQ.setGroupCard(fromGroup, fromQQ, playerNike + "[HP:" + count + "/" + playerHpMax + "]");
+                MyBatisUtil.closeSession();
+                return customResult(rollSHCheckHPSuccess, member, attributeData, value, count);
+            }
+        }catch (Exception e){
+            return customResult(rollSHCheckError,"初次鉴定为输入数据错误");
         }
-        findAllAttribute = cocAttributeMapper.findAttributeByFromQQ(fromQQ, fromGroup);
-        if (findAllAttribute == null) {
-            return customResult(rollSHCheckError, "没有数据");
-        }
-        if (parameterTypeData[0].charAt(0) != '+' && parameterTypeData[0].charAt(0) != '-') {
-            return customResult(rollSHCheckError, "格式错误");
-        }
 
-        if (parameterTypeData.length > 1 && parameterTypeData.length < 3) {
-
-            String inputAttribute = parameterTypeData[1];
-            String regex = inputAttribute + "\\d[0-9]*";
-            String findAttribute = RegularExpressionUtils.getMatcherString(regex, findAllAttribute);
-            String attributeData = findAttribute.substring(inputAttribute.length());
-
-            //利用Calc来进行字符串计算
-            String count = String.valueOf(new Calc(attributeData + value).getResult());
-
-            findAllAttribute = findAllAttribute.replace(findAttribute, inputAttribute + count);
-            cocAttributeMapper.updateAttributeByFromQQ(findAllAttribute, fromQQ, fromGroup);
-            MyBatisUtil.closeSession();
-
-            return customResult(rollSHCheckSuccess, member,inputAttribute, attributeData, value, count);
-        } else {
-            String findHPAttribute = RegularExpressionUtils.getMatcherString("hp\\d[0-9]*", findAllAttribute);
-            String playerHpMax = RegularExpressionUtils.getMatcherString("体力\\d[0-9]*", findAllAttribute).substring(2);
-            String playerNike = cocAttributeMapper.findPlayerNikeByFromQQAndGroup(fromQQ, fromGroup);
-            String attributeData = findHPAttribute.substring(2);
-
-            String count = String.valueOf(new Calc(attributeData + value).getResult());
-            findAllAttribute = findAllAttribute.replace(findHPAttribute, "hp" + count);
-            cocAttributeMapper.updateAttributeByFromQQ(findAllAttribute, fromQQ, fromGroup);
-            CQ.setGroupCard(fromGroup, fromQQ, playerNike + "[HP:" + count + "/" + playerHpMax + "]");
-            MyBatisUtil.closeSession();
-            return customResult(rollSHCheckHPSuccess,member, attributeData, value, count);
-        }
 
     }
 
     //.rb
     @Override
     public String rollReward(String parameter, long fromQQ, long fromGroup) {
-        return rewardAndPunishmentMainFunction(parameter, fromGroup, fromQQ, 0);
+
+        try {
+            return rewardAndPunishmentMainFunction(parameter, fromGroup, fromQQ, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return customResult(rollRbError,"参数错误");
+        }
+
     }
 
 
     //.rp
     @Override
     public String rollPunishment(String parameter, long fromQQ, long fromGroup) {
-        return rewardAndPunishmentMainFunction(parameter, fromGroup, fromQQ, 1);
+        try {
+            return rewardAndPunishmentMainFunction(parameter, fromGroup, fromQQ, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return customResult(rollRpError,"参数错误");
+        }
+
     }
 
     //.rh暗骰
     @Override
-    public String rollHide(String parameter, long fromQQ, long fromGroup){
-        Member member = CQ.getGroupMemberInfo(fromGroup,fromQQ,true);
+    public String rollHide(String parameter, long fromQQ, long fromGroup) {
+        Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ, true);
         List<Group> group = CQ.getGroupList();
         String groupName = "";
-        for (int i=0;i<group.size();i++){
-            if (group.get(i).getId()==fromGroup){
+        for (int i = 0; i < group.size(); i++) {
+            if (group.get(i).getId() == fromGroup) {
                 groupName = group.get(i).getName();
                 break;
             }
         }
-        String result = formulaCalculation("1d100",0)[1];
-        CQ.sendPrivateMsg(fromQQ,customResult(rollRhPrivateSuccess,member,groupName,result));
-        return customResult(rollRhSuccess,member);
+        String result = formulaCalculation("1d" + String.valueOf(rollFaceNumber), 0)[1];
+        CQ.sendPrivateMsg(fromQQ, customResult(rollRhPrivateSuccess, member, groupName, result,String.valueOf(rollFaceNumber)));
+        return customResult(rollRhSuccess, member);
     }
 
 
     //奖励骰和惩罚骰的公用函数 type 0 为奖励骰 1为惩罚
-    private String rewardAndPunishmentMainFunction(String parameter, long fromGroup, long fromQQ, int type) {
+    private String rewardAndPunishmentMainFunction(String parameter, long fromGroup, long fromQQ, int type) throws Exception{
         //0为骰子数 1为技能名 2数值
         String parameterTypeData[] = parameter.split(" ");
         int diceNumber;
@@ -310,15 +370,16 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
         messageType[1] = "rollRp";
 
         //现行判断参数数量
+
         if (parameterTypeData.length <= 2) {
             TypeTesting typeTesting = new TypeTesting();
-            if (typeTesting.isInt(parameterTypeData[0])){
+            if (typeTesting.isInt(parameterTypeData[0])) {
                 diceNumber = Integer.valueOf(parameterTypeData[0]);
                 attributeName = parameterTypeData[1];
                 parameterTypeData = new String[1];
                 parameterTypeData[0] = attributeName;
 
-            }else {
+            } else {
                 diceNumber = 1;
                 attributeName = parameterTypeData[0];
             }
@@ -331,8 +392,9 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
         }
 
+
         //生成1d100骰值
-        random = 1 + (int) Math.floor(Math.random() * 100);
+        random = 1 + (int) Math.floor(Math.random() * rollFaceNumber);
         //生成的奖励骰值
         rewardValue = rewardPunishmentFormulaCalculation(diceNumber);
         if (parameterTypeData.length < 4) {
@@ -346,12 +408,11 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
             String regex = attributeName + "\\d[0-9]*";
             String regexResult = RegularExpressionUtils.getMatcherString(regex, findAttribute);
-            if (regexResult ==null){
+            if (regexResult == null) {
                 attributeValue = "";
-            }else {
+            } else {
                 attributeValue = regexResult.substring(attributeName.length());
             }
-
 
 
             StringBuilder resultReward = new StringBuilder();
@@ -398,11 +459,11 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
             }
 
             //大成功
-            if (resultValue == 1) {
+            if (resultValue <= rollHouseRulesNumber && resultValue<Integer.valueOf(attributeValue)) {
                 return customResult(messageType[type] + "BigSuccess", member, String.valueOf(random), attributeValue, attributeName, resultReward.toString(), String.valueOf(resultValue));
             }
             //大失败
-            if (resultValue >= 100) {
+            if (resultValue > 100-rollHouseRulesNumber) {
                 return customResult(messageType[type] + "BigFail", member, String.valueOf(random), attributeValue, attributeName, resultReward.toString(), String.valueOf(resultValue));
             }
             //极难

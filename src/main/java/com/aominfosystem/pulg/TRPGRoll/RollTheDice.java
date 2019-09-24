@@ -8,6 +8,12 @@ package com.aominfosystem.pulg.TRPGRoll;
  **/
 public interface RollTheDice {
 
+    //.set
+    String rollSetFaceNumber(String parameter, long fromQQ, long fromGroup);
+
+    //.setCoc
+    String rollSetCocHouseRulesNumber(String parameter, long fromQQ, long fromGroup);
+
     //.ra
     public String rollAttribute(String parameter, long fromQQ, long fromGroup);
     //.rc

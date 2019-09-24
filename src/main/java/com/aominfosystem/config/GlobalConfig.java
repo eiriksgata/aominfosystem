@@ -12,4 +12,8 @@ public class GlobalConfig {
     public static String[] recourdGroupList;
     public static String[] recordAdmin;
     public static String instructionsPrefix = null;
+
+    public static int rollFaceNumber = 100;
+
+    public static int rollHouseRulesNumber = 1;
 }
