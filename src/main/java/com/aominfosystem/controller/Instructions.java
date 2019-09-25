@@ -4,8 +4,13 @@ package com.aominfosystem.controller;
 import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.config.GlobalConfig;
 import com.aominfosystem.controller.cofig.InstructionsConfig;
+import com.aominfosystem.pulg.DrawCard;
 import com.aominfosystem.pulg.DrawUtils;
+import com.aominfosystem.pulg.MusicPulg;
+import com.aominfosystem.pulg.NotePulg;
+import com.aominfosystem.pulg.TRPGRoll.AttributeManager;
 import com.aominfosystem.pulg.TRPGRoll.AttributeManagerImpl;
+import com.aominfosystem.pulg.TRPGRoll.RollTheDice;
 import com.aominfosystem.pulg.TRPGRoll.RollTheDiceImpl;
 import com.aominfosystem.pulg.impl.DrawCardImpl;
 import com.aominfosystem.pulg.impl.MusicPulgImpl;
@@ -21,13 +26,12 @@ import static com.sobte.cqp.jcq.event.JcqApp.CC;
 
 class Instructions {
 
-
-    private NotePulgImpl notePulg = new NotePulgImpl();
-    private MusicPulgImpl musicPulg = new MusicPulgImpl();
-    private DrawCardImpl drawCard = new DrawCardImpl();
+    private NotePulg notePulg = new NotePulgImpl();
+    private MusicPulg musicPulg = new MusicPulgImpl();
+    private DrawCard drawCard = new DrawCardImpl();
     private DrawUtils drawUtils = new DrawUtils();
-    private AttributeManagerImpl attributeManager = new AttributeManagerImpl();
-    private RollTheDiceImpl rollTheDice = new RollTheDiceImpl();
+    private AttributeManager attributeManager = new AttributeManagerImpl();
+    private RollTheDice rollTheDice = new RollTheDiceImpl();
 
     private boolean drawCooling = true;
     static boolean recordOpen = false;

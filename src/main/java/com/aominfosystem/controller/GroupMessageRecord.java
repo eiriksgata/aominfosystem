@@ -22,7 +22,6 @@ public class GroupMessageRecord {
 
     public void messageRecord(int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg) {
 
-
         if (!usingLocalData) {
 
             boolean saveOrNot = true;

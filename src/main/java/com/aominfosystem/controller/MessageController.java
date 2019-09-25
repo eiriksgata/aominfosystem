@@ -8,7 +8,9 @@ import com.aominfosystem.pojo.Groupserviceslist;
 import com.sobte.cqp.jcq.entity.IMsg;
 import org.apache.ibatis.session.SqlSession;
 
+import javax.annotation.Resource;
 import java.util.List;
+
 
 public class MessageController implements IMsg {
 

@@ -7,6 +7,8 @@ import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.utils.RegularExpressionUtils;
 import com.sobte.cqp.jcq.entity.Member;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
@@ -20,7 +22,6 @@ import static com.sobte.cqp.jcq.event.JcqApp.CQ;
  * @date:2019/9/16
  **/
 public class AttributeManagerImpl extends ResultMessageHandle implements AttributeManager {
-
 
     //.st
     @Override

@@ -25,10 +25,10 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
     //.set
     @Override
-    public String rollSetFaceNumber(String parameter,long fromQQ,long fromGroup){
+    public String rollSetFaceNumber(String parameter, long fromQQ, long fromGroup) {
         TypeTesting typeTesting = new TypeTesting();
-        if (typeTesting.isInt(parameter)){
-          rollFaceNumber = Integer.valueOf(parameter);
+        if (typeTesting.isInt(parameter)) {
+            rollFaceNumber = Integer.valueOf(parameter);
             try {
                 ConfigurationFile.writeCfgValue("aominfosystemConf" + "\\" + "aominfosystemConfig.ini", "COCRoll", "rollFaceNumber", String.valueOf(rollFaceNumber));
                 return "骰子面数设置为:" + String.valueOf(rollFaceNumber);
@@ -42,9 +42,9 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
     //.setCoc
     @Override
-    public String rollSetCocHouseRulesNumber(String parameter, long fromQQ, long fromGroup){
+    public String rollSetCocHouseRulesNumber(String parameter, long fromQQ, long fromGroup) {
         TypeTesting typeTesting = new TypeTesting();
-        if (typeTesting.isInt(parameter)){
+        if (typeTesting.isInt(parameter)) {
             rollHouseRulesNumber = Integer.valueOf(parameter);
             try {
                 ConfigurationFile.writeCfgValue("aominfosystemConf" + "\\" + "aominfosystemConfig.ini", "COCRoll", "rollHouseRulesNumber", String.valueOf(rollHouseRulesNumber));
@@ -71,18 +71,18 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
                     return customResult(rollRaAttributeBigSuccess, member, String.valueOf(random), inputData[1], inputData[0]);
                 }
                 //大失败
-                if (random > 100-rollHouseRulesNumber) {
+                if (random > 100 - rollHouseRulesNumber) {
                     return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
                 }
 
                 //ex
 
                 if (random <= (int) Math.floor(Float.valueOf(inputData[1]) / 5)) {
-                    return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
+                    return customResult(rollRaAttributeExSuccess, member, String.valueOf(random), inputData[1], inputData[0]);
                 }
                 //dif
                 if (random <= (int) Math.floor(Float.valueOf(inputData[1]) / 2)) {
-                    return customResult(rollRaAttributeBigFail, member, String.valueOf(random), inputData[1], inputData[0]);
+                    return customResult(rollRaAttributeDifficultySuccess, member, String.valueOf(random), inputData[1], inputData[0]);
                 }
 
 
@@ -108,7 +108,7 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
                     return customResult(rollRaAttributeBigSuccess, member, String.valueOf(random), attributeValue, inputData[0]);
                 }
                 //大失败判定
-                if (random > 100-rollHouseRulesNumber) {
+                if (random > 100 - rollHouseRulesNumber) {
                     return customResult(rollRaAttributeBigFail, member, String.valueOf(random), attributeValue, inputData[0]);
                 }
                 //极难
@@ -127,10 +127,9 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
                 }
 
             }
-        }catch (Exception e){
-            return customResult(rollRaAttributeError,"参数错误");
+        } catch (Exception e) {
+            return customResult(rollRaAttributeError, "参数错误");
         }
-
 
 
     }
@@ -145,7 +144,7 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
         try {
             String result[] = formulaCalculation(parameter, 0);
-            System.out.println(result[0] + "=" + result[1]);
+            //System.out.println(result[0] + "=" + result[1]);
             return customResult(rollRandomSuccess, CQ.getGroupMemberInfo(fromGroup, fromQQ, true), result[0], result[1]);
         } catch (Exception e) {
             return customResult(rollRandomError, e.toString());
@@ -156,7 +155,6 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
 
     @Override
     public String rollSCCheck(String parameter, long fromQQ, long fromGroup) {
-
         try {
             String parameterType[] = parameter.split(" ");
             int random = 1 + (int) Math.floor(Math.random() * rollFaceNumber);
@@ -176,7 +174,7 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
                 String successFormula = data[0];
 
                 //大失败
-                if (random > 100-rollHouseRulesNumber) {
+                if (random > 100 - rollHouseRulesNumber) {
                     String regex = "\\d[0-9]*d\\d[0-9]*";
                     List<String> randomKeyList = RegularExpressionUtils.getMatchers(regex, data[1]);
                     String count;
@@ -217,7 +215,7 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
                 int surplus = 0;
                 MyBatisUtil.closeSession();
                 //大失败
-                if (random > 100-rollHouseRulesNumber) {
+                if (random > 100 - rollHouseRulesNumber) {
                     result = formulaCalculation(parameter, 1);
                     surplus = attributeValue - Integer.valueOf(result[1]);
                     String changeStr = "san " + surplus;
@@ -242,8 +240,8 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
                 return customResult(rollSCCheckSuccess, member, String.valueOf(random), String.valueOf(attributeValue), result[0], result[1], String.valueOf(surplus));
 
             }
-        }catch (Exception e){
-            return customResult(rollSCCheckError,"参数数据不正确");
+        } catch (Exception e) {
+            return customResult(rollSCCheckError, "参数数据不正确");
         }
 
     }
@@ -304,11 +302,9 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
                 MyBatisUtil.closeSession();
                 return customResult(rollSHCheckHPSuccess, member, attributeData, value, count);
             }
-        }catch (Exception e){
-            return customResult(rollSHCheckError,"初次鉴定为输入数据错误");
+        } catch (Exception e) {
+            return customResult(rollSHCheckError, "初次鉴定为输入数据错误");
         }
-
-
     }
 
     //.rb
@@ -319,7 +315,7 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
             return rewardAndPunishmentMainFunction(parameter, fromGroup, fromQQ, 0);
         } catch (Exception e) {
             e.printStackTrace();
-            return customResult(rollRbError,"参数错误");
+            return customResult(rollRbError, "参数错误");
         }
 
     }
@@ -332,7 +328,7 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
             return rewardAndPunishmentMainFunction(parameter, fromGroup, fromQQ, 1);
         } catch (Exception e) {
             e.printStackTrace();
-            return customResult(rollRpError,"参数错误");
+            return customResult(rollRpError, "参数错误");
         }
 
     }
@@ -350,13 +346,13 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
             }
         }
         String result = formulaCalculation("1d" + String.valueOf(rollFaceNumber), 0)[1];
-        CQ.sendPrivateMsg(fromQQ, customResult(rollRhPrivateSuccess, member, groupName, result,String.valueOf(rollFaceNumber)));
+        CQ.sendPrivateMsg(fromQQ, customResult(rollRhPrivateSuccess, member, groupName, result, String.valueOf(rollFaceNumber)));
         return customResult(rollRhSuccess, member);
     }
 
 
     //奖励骰和惩罚骰的公用函数 type 0 为奖励骰 1为惩罚
-    private String rewardAndPunishmentMainFunction(String parameter, long fromGroup, long fromQQ, int type) throws Exception{
+    private String rewardAndPunishmentMainFunction(String parameter, long fromGroup, long fromQQ, int type) throws Exception {
         //0为骰子数 1为技能名 2数值
         String parameterTypeData[] = parameter.split(" ");
         int diceNumber;
@@ -459,11 +455,11 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
             }
 
             //大成功
-            if (resultValue <= rollHouseRulesNumber && resultValue<Integer.valueOf(attributeValue)) {
+            if (resultValue <= rollHouseRulesNumber && resultValue < Integer.valueOf(attributeValue)) {
                 return customResult(messageType[type] + "BigSuccess", member, String.valueOf(random), attributeValue, attributeName, resultReward.toString(), String.valueOf(resultValue));
             }
             //大失败
-            if (resultValue > 100-rollHouseRulesNumber) {
+            if (resultValue > 100 - rollHouseRulesNumber) {
                 return customResult(messageType[type] + "BigFail", member, String.valueOf(random), attributeValue, attributeName, resultReward.toString(), String.valueOf(resultValue));
             }
             //极难
@@ -483,7 +479,6 @@ public class RollTheDiceImpl extends ResultMessageHandle implements RollTheDice 
                 return customResult(messageType[type] + "Fail", member, String.valueOf(random), attributeValue, attributeName, resultReward.toString(), String.valueOf(resultValue));
             }
         }
-
         return customResult(messageType[type] + "Error", "参数个数不正确");
     }
 

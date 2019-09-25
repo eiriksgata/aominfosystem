@@ -12,13 +12,19 @@ import com.aominfosystem.utils.OpenBrowserUtils;
 import com.aominfosystem.utils.RegularExpressionUtils;
 import com.sobte.cqp.jcq.entity.*;
 import com.sobte.cqp.jcq.event.JcqAppAbstract;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.TimerTask;
 
+import javax.annotation.Resource;
 import javax.swing.*;
 
 import static com.aominfosystem.config.CreateSystemFile.createInifile;
@@ -26,7 +32,9 @@ import static com.aominfosystem.utils.DownLoadUtils.downLoadFromUrl;
 
 public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
 
-    private ApplicationContext context = null;
+
+
+    private ApplicationContext context;
     private GroupMessageRecord groupMessageRecord = new GroupMessageRecord();
     private MessageController messageController = new MessageController();
 
@@ -53,11 +61,6 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 开始模拟群聊消息
         //demo.groupMsg(0, 10008, 123456, 77777, "", ">_musicFind xiami,soldout", 0);
         demo.groupMsg(0, 10008, 783679747, 2353686862L, "", ".r 1d2+2d3", 0);
-
-//        RollTheDiceImpl rollTheDice = new RollTheDiceImpl();
-//        for (int i = 0; i < 1; i++) {
-//            System.out.println(rollTheDice.rollHide("", 2353686862L, 783679747));
-//        }
 
         // ......
         // 依次类推，可以根据实际情况修改参数，和方法测试效果
@@ -93,6 +96,7 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public int startup() {
         // 获取应用数据目录(无需储存数据时，请将此行注释)
         String appDirectory = CQ.getAppDirectory();
+        //context = SpringApplication.run(AominfosystemApplication.class);
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         // 应用的所有数据、配置【必须】存放于此目录，避免给用户带来困扰。
         return 0;
@@ -107,6 +111,7 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      */
     public int exit() {
         //System.exit(0);
+        //SpringApplication.exit(context);
         return 0;
     }
 
@@ -172,8 +177,6 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             groupMessageRecord.messageRecord(msgId, fromGroup, fromQQ, fromAnonymous, msg);
         }
 
-
-        //CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + "你发送了这样的消息：" + msg + "\n来自Java插件");
         return MSG_IGNORE;
     }
 
@@ -353,6 +356,7 @@ public class RobotCore extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
         //启动SpringBoot
         //context = SpringApplication.run(AominfosystemApplication.class);
+
         return 0;
     }
 
