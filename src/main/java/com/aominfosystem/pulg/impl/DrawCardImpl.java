@@ -11,9 +11,8 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
 
-import static com.sobte.cqp.jcq.event.JcqApp.CC;
-import static com.sobte.cqp.jcq.event.JcqApp.CQ;
-
+import static com.aominfosystem.config.GlobalConfig.CQ;
+import static com.aominfosystem.config.GlobalConfig.CC;
 
 /**
  * @author: create by Keith

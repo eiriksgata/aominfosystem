@@ -6,9 +6,9 @@ import com.aominfosystem.config.CreateSystemFile;
 import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.mapper.GrouprecordMapper;
 import com.aominfosystem.pojo.Grouprecord;
-import com.sobte.cqp.jcq.entity.Member;
 import org.apache.ibatis.session.SqlSession;
 import com.aominfosystem.controller.cofig.GroupMessageCofig;
+import org.meowy.cqp.jcq.entity.Member;
 
 import java.sql.Timestamp;
 
@@ -16,9 +16,9 @@ import static com.aominfosystem.config.GlobalConfig.recordSwitch;
 import static com.aominfosystem.config.GlobalConfig.usingLocalData;
 import static com.aominfosystem.controller.Instructions.recordOpen;
 import static com.aominfosystem.utils.FileUtils.fileLinesWrite;
-import static com.sobte.cqp.jcq.event.JcqApp.CQ;
+import static com.aominfosystem.config.GlobalConfig.CQ;
 
-public class GroupMessageRecord {
+public class GroupMessageRecord{
 
     public void messageRecord(int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg) {
 
@@ -27,7 +27,7 @@ public class GroupMessageRecord {
             boolean saveOrNot = true;
 
             String nike;
-            Member member = CQ.getGroupMemberInfoV2(fromGroup, fromQQ,true);
+            Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ,true);
             nike = getNikeString(member);
 
             for (int j = 0; j < GroupMessageCofig.unMonitoringQQ.length; j++) {
@@ -73,7 +73,7 @@ public class GroupMessageRecord {
         }else {
             if (recordSwitch&&recordOpen){
                 String likeText;
-                Member member = CQ.getGroupMemberInfoV2(fromGroup, fromQQ,true);
+                Member member = CQ.getGroupMemberInfo(fromGroup, fromQQ,true);
                 String name = getNikeString(member);
                 likeText = "[" + name + "]" + msg ;
                 fileLinesWrite(CreateSystemFile.folderName + "\\"+ "localMessageRecord" + "\\" + fromGroup +".txt",likeText,true);
@@ -90,7 +90,7 @@ public class GroupMessageRecord {
         if(member.getCard().equals("")){
             nike = member.getNick();
         }else if(member.getNick().equals("")){
-            nike = String.valueOf(member.getQqId());
+            nike = String.valueOf(member.getQQId());
         }else {
             nike = member.getCard();
         }
@@ -100,5 +100,6 @@ public class GroupMessageRecord {
     public void sendGroupMessage(String sendMessage) {
 
     }
+
 
 }

@@ -2,13 +2,13 @@ package com.aominfosystem.controller;
 
 
 import com.aominfosystem.utils.RegularExpressionUtils;
-import com.sobte.cqp.jcq.entity.Member;
+import org.meowy.cqp.jcq.entity.Member;
 
 import java.util.List;
 
 import static com.aominfosystem.config.CustomTextConfig.customText;
+import static com.aominfosystem.config.GlobalConfig.CC;
 import static com.aominfosystem.config.GlobalConfig.rollFaceNumber;
-import static com.sobte.cqp.jcq.event.JcqApp.CC;
 
 /**
  * @author: create by Keith
@@ -32,7 +32,7 @@ public class ResultMessageHandle {
         return resultText;
     }
 
-    protected String customResult(String type,Member member,String... value){
+    protected String customResult(String type, Member member, String... value){
 
         String regex = "\\{.*?\\}";
         String processingResult = customResult(type,value);
@@ -48,7 +48,7 @@ public class ResultMessageHandle {
 
         switch (input){
             case "{member.getQQ}":
-                return String.valueOf(member.getQqId());
+                return String.valueOf(member.getQQId());
             case "{member.getCard}":
                 return member.getCard();
             case "{member.getNick}":
@@ -70,7 +70,7 @@ public class ResultMessageHandle {
             case "{member.getAddTime}":
                 return String.valueOf(member.getAddTime().toString());
             case "{at}":
-                return CC.at(member.getQqId());
+                return CC.at(member.getQQId());
             case "{rollFaceNumber}":
                 return String.valueOf(rollFaceNumber);
             default:

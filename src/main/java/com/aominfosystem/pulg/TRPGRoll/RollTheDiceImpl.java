@@ -3,9 +3,9 @@ package com.aominfosystem.pulg.TRPGRoll;
 import com.aominfosystem.controller.ResultMessageHandle;
 import com.aominfosystem.mapper.CocAttributeMapper;
 import com.aominfosystem.utils.*;
-import com.sobte.cqp.jcq.entity.Group;
-import com.sobte.cqp.jcq.entity.Member;
 import org.apache.ibatis.session.SqlSession;
+import org.meowy.cqp.jcq.entity.Group;
+import org.meowy.cqp.jcq.entity.Member;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,8 +13,8 @@ import java.util.List;
 import static com.aominfosystem.config.CustomTextConfig.*;
 import static com.aominfosystem.config.GlobalConfig.rollFaceNumber;
 import static com.aominfosystem.config.GlobalConfig.rollHouseRulesNumber;
-import static com.sobte.cqp.jcq.event.JcqApp.CQ;
 
+import static com.aominfosystem.config.GlobalConfig.CQ;
 /**
  * @author: create by Keith
  * @version: v1.0

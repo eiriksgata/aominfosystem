@@ -22,7 +22,7 @@ import com.aominfosystem.utils.RegularExpressionUtils;
 import java.io.IOException;
 import java.util.*;
 
-import static com.sobte.cqp.jcq.event.JcqApp.CC;
+import static com.aominfosystem.config.GlobalConfig.CC;
 
 class Instructions {
 

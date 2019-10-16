@@ -5,12 +5,12 @@ import com.aominfosystem.config.GlobalConfig;
 import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.mapper.GroupserviceslistMapper;
 import com.aominfosystem.pojo.Groupserviceslist;
-import com.sobte.cqp.jcq.entity.IMsg;
 import org.apache.ibatis.session.SqlSession;
+import org.meowy.cqp.jcq.entity.IMsg;
+import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import java.util.List;
-
 
 public class MessageController implements IMsg {
 

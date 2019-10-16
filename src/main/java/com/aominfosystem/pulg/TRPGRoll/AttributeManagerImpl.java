@@ -5,15 +5,13 @@ import com.aominfosystem.mapper.CocAttributeMapper;
 import com.aominfosystem.pojo.CocAttribute;
 import com.aominfosystem.utils.MyBatisUtil;
 import com.aominfosystem.utils.RegularExpressionUtils;
-import com.sobte.cqp.jcq.entity.Member;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
+import org.meowy.cqp.jcq.entity.Member;
 
 import java.util.List;
 
 import static com.aominfosystem.config.CustomTextConfig.*;
-import static com.sobte.cqp.jcq.event.JcqApp.CQ;
+import static com.aominfosystem.config.GlobalConfig.CQ;
 
 /**
  * @author: create by Keith
@@ -84,7 +82,6 @@ public class AttributeManagerImpl extends ResultMessageHandle implements Attribu
             }
             MyBatisUtil.closeSession();
             return customResult(attributeUpdateMessageSuccess, CQ.getGroupMemberInfo(fromGroup, fromQQ, true));
-
         } catch (Exception e) {
             return customResult(attributeUpdateMessageError, CQ.getGroupMemberInfo(fromGroup, fromQQ, true), "录入错误");
 

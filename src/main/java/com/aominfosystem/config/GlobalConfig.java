@@ -1,5 +1,8 @@
 package com.aominfosystem.config;
 
+import org.meowy.cqp.jcq.entity.CoolQ;
+import org.meowy.cqp.jcq.message.CQCode;
+
 import java.util.List;
 
 public class GlobalConfig {
@@ -16,4 +19,7 @@ public class GlobalConfig {
     public static int rollFaceNumber = 100;
 
     public static int rollHouseRulesNumber = 1;
+
+    public static CoolQ CQ;
+    public static CQCode CC;
 }
