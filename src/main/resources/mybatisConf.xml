@@ -29,9 +29,9 @@
             <!-- 配置数据库连接信息 -->
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://134.175.43.199:3306/aom_robotdata?characterEncoding=utf-8" />
-                <property name="username" value="aominfosystem" />
-                <property name="password" value="FNqMJr3aHesDLtu0w6Oe" />
+                <property name="url" value="jdbc:mysql://localhost:3306/aom_robotdata?characterEncoding=utf-8" />
+                <property name="username" value="root" />
+                <property name="password" value="123456" />
             </dataSource>
         </environment>
     </environments>
